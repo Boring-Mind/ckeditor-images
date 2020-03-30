@@ -1,7 +1,11 @@
+import nanoid
+from os import path
 from random import randrange
+from sys import getsizeof
 
-from django.shortcuts import render
+from django.conf import settings
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 
 from .models import Article
 
@@ -26,18 +30,29 @@ def process_article(request):
     )
 
 
-def process_images(request):
-    request_body = request.POST.body
-    print(request_body)
+def get_new_filename(filename: str) -> str:
+    extension = path.splitext(filename)[1]
+    new_name = nanoid.generate(size=15)
+    return new_name + extension
+
+
+def get_new_filepath(filename: str) -> str:
+    filename = get_new_filename(filename)
+    return path.join(settings.UPLOAD_ROOT, filename)
+
+
+def process_images(request) -> HttpResponse:
+    filename = request.FILES["upload"].name
+    print(get_new_filepath(filename))
+    # print(request.FILES["upload"].size)
     return HttpResponse('Image was received')
 
 
-def upload_view(request):
+def upload_view(request) -> HttpResponse:
     if request.method == 'POST':
         if request.headers['content_type'] == 'application/x-www-form-urlencoded':
             return process_article(request)
-        elif request.headers['content_type'] == 'multipart/form-data':
+        elif 'multipart/form-data' in request.headers['content_type']:
             return process_images(request)
-        
     else:
         return HttpResponse('<h1>GET was sent, but POST needed</h1>')

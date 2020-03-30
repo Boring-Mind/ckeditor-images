@@ -38,7 +38,7 @@ $(document).ready(function(){
         simpleUpload: {
             uploadUrl: 'http://127.0.0.1:8000/upload/',
             headers: {
-              'X-CSRF-TOKEN': csrf_token,
+              'X-CSRFToken': csrf_token,
             }
         }
       } )
