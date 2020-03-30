@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>CKEditor Image Upload</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- <script src="https://cdn.ckeditor.com/ckeditor5/18.0.0/classic/ckeditor.js"></script> -->
+  <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+  <form id="editor-form">
+    {% csrf_token %}
+    <textarea id="editor"></textarea>
+    <input id="editor-submit" type="button" name="submit" value="Submit">
+  </form>
+</body>
+</html>
