@@ -1,13 +1,14 @@
 import nanoid
 from os import path
 from random import randrange
-from sys import getsizeof
+# from sys import getsizeof
 
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 from .models import Article
+from .forms import ImageForm
 
 
 def editor_view(request):
@@ -41,11 +42,32 @@ def get_new_filepath(filename: str) -> str:
     return path.join(settings.UPLOAD_ROOT, filename)
 
 
+def get_image_data(request):
+    image = request.FILES['upload']
+    filename = request.FILES['upload'].name
+
+    filename = get_new_filename(filename)
+    image.name = filename
+
+    return {'image': image}
+
+
+def save_image_to_db(request) -> bool:
+    form = ImageForm(request.POST, get_image_data(request))
+    if form.is_valid():
+        form.save()
+        return True
+    else:
+        return False
+
+
 def process_images(request) -> HttpResponse:
-    filename = request.FILES["upload"].name
-    print(get_new_filepath(filename))
     # print(request.FILES["upload"].size)
-    return HttpResponse('Image was received')
+    
+    if save_image_to_db(request) is True:
+        return HttpResponse('Image was received')
+    else:
+        return HttpResponse('Some error was occured')
 
 
 def upload_view(request) -> HttpResponse:
