@@ -7,6 +7,9 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
+from wand.image import Image
+from wand.exceptions import BlobError, FileOpenError
+
 from .models import Article
 from .forms import ImageForm
 
@@ -42,6 +45,18 @@ def get_new_filepath(filename: str) -> str:
     return path.join(settings.UPLOAD_ROOT, filename)
 
 
+def check_image(image_path: str) -> str:
+    try:
+        with Image(filename=image_path):
+            # Image is correct
+            return ''
+    except BlobError:
+        return (f'Unable to open image: \'{image_path}\': '
+                'No such file or directory')
+    except FileOpenError:
+        return 'Unsupported mime type'
+
+
 def get_image_data(request):
     image = request.FILES['upload']
     filename = request.FILES['upload'].name
@@ -49,7 +64,10 @@ def get_image_data(request):
     filename = get_new_filename(filename)
     image.name = filename
 
-    return {'image': image}
+    if check_image(image.name):
+        return {'image': image}
+    else:
+        return {}
 
 
 def save_image_to_db(request) -> bool:
@@ -63,7 +81,7 @@ def save_image_to_db(request) -> bool:
 
 def process_images(request) -> HttpResponse:
     # print(request.FILES["upload"].size)
-    
+
     if save_image_to_db(request) is True:
         return HttpResponse('Image was received')
     else:
