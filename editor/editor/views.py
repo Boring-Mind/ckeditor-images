@@ -35,14 +35,29 @@ def process_article(request):
 
 
 def get_new_filename(filename: str) -> str:
+    """Generate filename for new image.
+
+    Resulted filename looks like that: nMcsadvknv.jpg
+    """
     extension = path.splitext(filename)[1]
     new_name = nanoid.generate(size=15)
     return new_name + extension
 
 
 def get_new_filepath(filename: str) -> str:
+    """Generate absolute path to new image."""
     filename = get_new_filename(filename)
     return path.join(settings.UPLOAD_ROOT, filename)
+
+
+def get_unique_filename(filename: str) -> str:
+    """Check generated filename for uniqueness."""
+    new_filename = get_new_filepath(filename)
+
+    while path.exists(get_new_filepath(new_filename)):
+        new_filename = get_new_filepath(filename)
+
+    return new_filename
 
 
 def check_image(image_path: str) -> str:
@@ -95,4 +110,4 @@ def upload_view(request) -> HttpResponse:
         elif 'multipart/form-data' in request.headers['content_type']:
             return process_images(request)
     else:
-        return HttpResponse('<h1>GET was sent, but POST needed</h1>')
+        return HttpResponse(status=404)
