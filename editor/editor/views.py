@@ -40,6 +40,8 @@ def get_new_filename(filename: str) -> str:
     Resulted filename looks like that: nMcsadvknv.jpg
     """
     extension = path.splitext(filename)[1]
+    if extension == '':
+        extension = filename
     new_name = nanoid.generate(size=15)
     return new_name + extension
 
