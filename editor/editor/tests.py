@@ -76,6 +76,6 @@ class ImageProcess(TestCase):
 
     def test_image_url(self):
         filename = 'simple.jpg'
-        ref_url = settings.MEDIA_ROOT + '/uploads/' + filename
+        ref_url = settings.MEDIA_URL + '/uploads/' + filename
 
         self.assertEqual(views.generate_img_url(filename), ref_url)
