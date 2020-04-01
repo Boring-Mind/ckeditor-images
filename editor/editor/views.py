@@ -34,7 +34,7 @@ def process_article(request):
     )
 
 
-def get_new_filename(filename: str) -> str:
+def generate_name(filename: str) -> str:
     """Generate filename for new image.
 
     Resulted filename looks like that: nMcsadvknv.jpg
@@ -46,20 +46,20 @@ def get_new_filename(filename: str) -> str:
     return new_name + extension
 
 
-def get_new_filepath(filename: str) -> str:
+def generate_path(filename: str) -> str:
     """Generate absolute path to new image."""
-    filename = get_new_filename(filename)
     return path.join(settings.UPLOAD_ROOT, filename)
 
 
 def get_unique_filename(filename: str) -> str:
     """Check generated filename for uniqueness."""
-    new_filename = get_new_filepath(filename)
+    new_name = generate_name(filename)
+    new_path = generate_path(new_name)
 
-    while path.exists(get_new_filepath(new_filename)):
-        new_filename = get_new_filepath(filename)
+    while path.exists(new_path):
+        new_path = generate_path(new_name)
 
-    return new_filename
+    return new_name
 
 
 def check_image(image_path: str) -> str:
@@ -78,7 +78,7 @@ def get_image_data(request):
     image = request.FILES['upload']
     filename = request.FILES['upload'].name
 
-    filename = get_new_filename(filename)
+    filename = get_unique_filename(filename)
     image.name = filename
 
     if check_image(image.name):

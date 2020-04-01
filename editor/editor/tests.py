@@ -31,7 +31,7 @@ class ImageLoad(TestCase):
 
 class ImageProcess(TestCase):
     def filename_is_correct(self, filename: str, ext: str):
-        test_filename = views.get_new_filename(filename + ext)
+        test_filename = views.generate_name(filename + ext)
         match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
         self.assertNotEqual(match, None, f'Result is: {test_filename}')
 
@@ -59,7 +59,7 @@ class ImageProcess(TestCase):
         ref_path = os.path.join(settings.UPLOAD_ROOT, img_name)
         ref_path = os.path.split(ref_path)[0]
 
-        test_path = views.get_new_filepath(img_name)
+        test_path = views.generate_path(img_name)
         test_path = os.path.split(test_path)[0]
 
         self.assertEqual(test_path, ref_path)
