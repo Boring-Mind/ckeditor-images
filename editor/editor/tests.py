@@ -44,3 +44,31 @@ class ImageProcess(TestCase):
         self.filename_is_correct('simple', '.tiff')
         self.filename_is_correct('', '.jpg')
         self.filename_is_correct('.vsd..sd.v.sdv', '.jpg')
+
+    def test_filepath_is_correct(self):
+        img_name = 'image.jpg'
+
+        # We are testing only path to the file
+        # So we don't need the filename
+        # Which is set by random with py-nanoid lib
+        ref_path = os.path.join(settings.UPLOAD_ROOT, img_name)
+        ref_path = os.path.split(ref_path)[0]
+
+        test_path = views.get_new_filepath(img_name)
+        test_path = os.path.split(test_path)[0]
+
+        self.assertEqual(test_path, ref_path)
+
+    def image_checking_case(self, message: str, img_name: str):
+        img_path = os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
+        self.assertIn(message, views.check_image(img_path))
+
+    def test_image_checking(self):
+        self.image_checking_case('', 'simple.jpg')
+        # self.image_checking_case(
+        #     'File is too large. Maximum allowed size is 2.5Mb', 'large.jpg'
+        # )
+        self.image_checking_case('Unsupported mime type', 'html_page.html')
+        self.image_checking_case(
+            'No such file or directory', 'false_name.none'
+        )
