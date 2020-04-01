@@ -35,6 +35,11 @@ class ImageProcess(TestCase):
         match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
         self.assertNotEqual(match, None, f'Result is: {test_filename}')
 
+    def image_checking_case(self, message: str, img_name: str):
+        img_path = os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
+        self.assertIn(message, views.check_image(img_path))
+
+
     def test_filename_is_correct(self):
         self.filename_is_correct('simple', '.jpg')
         self.filename_is_correct('simple', '.jpeg')
@@ -58,10 +63,6 @@ class ImageProcess(TestCase):
         test_path = os.path.split(test_path)[0]
 
         self.assertEqual(test_path, ref_path)
-
-    def image_checking_case(self, message: str, img_name: str):
-        img_path = os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
-        self.assertIn(message, views.check_image(img_path))
 
     def test_image_checking(self):
         self.image_checking_case('', 'simple.jpg')
