@@ -51,6 +51,11 @@ def generate_path(filename: str) -> str:
     return path.join(settings.UPLOAD_ROOT, filename)
 
 
+def generate_img_url(filename: str) -> str:
+    """Generate url link to the new image."""
+    return settings.MEDIA_URL + '/uploads/' + filename
+
+
 def get_unique_filename(filename: str) -> str:
     """Check generated filename for uniqueness."""
     new_name = generate_name(filename)

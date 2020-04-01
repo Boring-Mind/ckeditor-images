@@ -73,3 +73,9 @@ class ImageProcess(TestCase):
         self.image_checking_case(
             'No such file or directory', 'false_name.none'
         )
+
+    def test_image_url(self):
+        filename = 'simple.jpg'
+        ref_url = settings.MEDIA_ROOT + '/uploads/' + filename
+
+        self.assertEqual(views.generate_img_url(filename), ref_url)
