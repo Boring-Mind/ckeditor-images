@@ -71,7 +71,7 @@ class ImageProcess(TestCase):
         # )
         self.image_checking_case('Unsupported mime type', 'html_page.jpg')
         self.image_checking_case('Unsupported mime type', 'malicious_js.png')
-        self.image_checking_case('Unsupported mime type', 'svg_icon.svg')
+        self.image_checking_case('Unsupported mime type', 'icon.svg')
         self.image_checking_case(
             'No such file or directory', 'false_name.none'
         )

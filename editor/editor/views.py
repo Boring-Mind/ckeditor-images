@@ -8,9 +8,6 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
-from wand.image import Image
-from wand.exceptions import BlobError, CorruptImageError, FileOpenError
-
 from .models import Article
 from .forms import ImageForm
 
@@ -69,18 +66,16 @@ def get_unique_filename(filename: str) -> str:
 
 
 def check_image(image_path: str) -> str:
-    try:
-        with Image(filename=image_path) as img:
-            # Image is correct
-            if img.format in settings.SUPPORTED_IMG_FORMATS:
-                return ''
-            else:
-                return 'Unsupported mime type'
-    except BlobError:
+    """Test image for the correct filetype."""
+    if not path.exists(image_path):
         return (f'Unable to open image: \'{image_path}\': '
                 'No such file or directory')
-    except (FileOpenError, CorruptImageError):
-        return 'Unsupported mime type'
+
+    img_type = imghdr.what(image_path)
+    if img_type in settings.SUPPORTED_IMG_FORMATS:
+        return ''
+    
+    return 'Unsupported mime type'
 
 
 def get_image_data(request):
