@@ -7,6 +7,7 @@ import imghdr
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
+from django.contrib.sites.models import Site
 
 from .models import Article
 from .forms import ImageForm
@@ -49,9 +50,16 @@ def generate_path(filename: str) -> str:
     return path.join(settings.UPLOAD_ROOT, filename)
 
 
+def get_current_domain():
+    current_site = Site.objects.get_current()
+    return current_site.domain
+
+
 def generate_img_url(filename: str) -> str:
     """Generate url link to the new image."""
-    return settings.MEDIA_URL + '/uploads/' + filename
+    protocol = 'http://'
+    domain = get_current_domain()
+    return protocol + domain + settings.MEDIA_URL + 'uploads/' + filename
 
 
 def get_unique_filename(filename: str) -> str:
@@ -67,8 +75,6 @@ def get_unique_filename(filename: str) -> str:
 
 def check_image(image_path: str) -> str:
     """Test image for the correct filetype."""
-    print(path.isfile(image_path))
-    print(image_path)
     if not path.isfile(image_path):
         return (f'Unable to open image: \'{image_path}\': '
                 'No such file or directory')
@@ -94,21 +100,25 @@ def get_image_data(request):
 
 
 def save_image_to_db(request) -> bool:
-    form = ImageForm(request.POST, get_image_data(request))
+    image_data = get_image_data(request)
+    form = ImageForm(request.POST, image_data)
     if form.is_valid():
         form.save()
-        return True
+        img_url = generate_img_url(image_data['image'].name)
+        img_url = request.build_absolute_uri(img_url)
+        return {'url': img_url}
     else:
-        return False
+        return {}
 
 
-def process_images(request) -> HttpResponse:
+def process_images(request):
     # print(request.FILES["upload"].size)
 
-    if save_image_to_db(request) is True:
-        return HttpResponse('Image was received')
+    response = save_image_to_db(request)
+    if 'url' in response:
+        return JsonResponse(response)
     else:
-        return HttpResponse('Some error was occured')
+        return HttpResponse(status=500)
 
 
 def upload_view(request) -> HttpResponse:

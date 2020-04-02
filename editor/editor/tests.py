@@ -1,5 +1,6 @@
 import os
 import re
+import json
 
 from django.test import TestCase
 from django.conf import settings
@@ -17,16 +18,29 @@ class ImageLoad(TestCase):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
-    # def test_return_filenames_on_success_image_upload(self):
-    #     img_path = self.get_image_path('simple.jpg')
+    def test_return_filenames_on_success_image_upload(self):
+        img_path = self.get_image_path('image.jpg')
 
-    #     with open(img_path, 'rb') as image:
-    #         response = self.client.post('/upload/', {
-    #             'upload': image
-    #         })
-    #         self.assertEqual(response.content, {
-    #             "url": "https://example.com/images/foo.jpg"
-    #         })
+        with open(img_path, 'rb') as image:
+            response = self.client.post('/upload/', {
+                'upload': image
+            })
+            response_json = json.loads(response.content)
+            
+            # There cannot be an error message in a successful request
+            self.assertTrue('message' not in response_json)
+
+            response_url = response_json['url']
+
+            match = re.fullmatch(
+                "http://127.0.0.1:8000/media/uploads/"
+                r"[\w-]{15}\.\w{3,4}",
+                response_url
+            )
+
+            self.assertNotEqual(
+                match, None, f"Function returns {response_url}"
+            )
 
 
 class ImageProcess(TestCase):
@@ -95,6 +109,6 @@ class ImageProcess(TestCase):
 
     def test_image_url(self):
         filename = 'simple.jpg'
-        ref_url = settings.MEDIA_URL + '/uploads/' + filename
+        ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
 
         self.assertEqual(views.generate_img_url(filename), ref_url)
