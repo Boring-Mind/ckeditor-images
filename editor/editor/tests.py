@@ -35,9 +35,18 @@ class ImageProcess(TestCase):
         match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
         self.assertNotEqual(match, None, f'Result is: {test_filename}')
 
+    def make_img_path(self, img_name: str) -> str:
+        return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
+
     def image_checking_case(self, message: str, img_name: str):
-        img_path = os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
-        self.assertIn(message, views.check_image(img_path))
+        img_path = self.make_img_path(img_name)
+        self.assertEqual(message, views.check_image(img_path))
+
+    def image_checking_not_exists_case(self, img_name: str):
+        img_path = self.make_img_path(img_name)
+        message = (f'Unable to open image: \'{img_path}\': '
+                   'No such file or directory')
+        self.image_checking_case(message, img_name)
 
 
     def test_filename_is_correct(self):
@@ -65,16 +74,24 @@ class ImageProcess(TestCase):
         self.assertEqual(test_path, ref_path)
 
     def test_image_checking(self):
-        self.image_checking_case('', 'simple.jpg')
+        self.image_checking_case('Image check completed', 'image.jpg')
+        self.image_checking_case('Image check completed', 'image.png')
+        self.image_checking_case('Image check completed', 'image.webp')
+        self.image_checking_case('Image check completed', 'image.tiff')
+        self.image_checking_case('Image check completed', 'image.gif')
+
         # self.image_checking_case(
         #     'File is too large. Maximum allowed size is 2.5Mb', 'large.jpg'
         # )
+
         self.image_checking_case('Unsupported mime type', 'html_page.jpg')
         self.image_checking_case('Unsupported mime type', 'malicious_js.png')
         self.image_checking_case('Unsupported mime type', 'icon.svg')
-        self.image_checking_case(
-            'No such file or directory', 'false_name.none'
-        )
+
+        self.image_checking_not_exists_case('false_name.none')
+        self.image_checking_not_exists_case('images.jpg')
+        self.image_checking_not_exists_case('image.jpg1')
+        self.image_checking_not_exists_case('image.jpg.jpg')
 
     def test_image_url(self):
         filename = 'simple.jpg'
