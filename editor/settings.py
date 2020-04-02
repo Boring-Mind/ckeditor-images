@@ -132,4 +132,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'public', 'media')
 
 UPLOAD_ROOT = os.path.join(MEDIA_ROOT, 'uploads')
 
+# image formats, that are supported to upload to server
 SUPPORTED_IMG_FORMATS = ['png', 'jpeg', 'tiff', 'webp', 'gif']
