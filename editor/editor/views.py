@@ -2,6 +2,7 @@ import nanoid
 from os import path
 from random import randrange
 # from sys import getsizeof
+import imghdr
 
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
@@ -69,9 +70,12 @@ def get_unique_filename(filename: str) -> str:
 
 def check_image(image_path: str) -> str:
     try:
-        with Image(filename=image_path):
+        with Image(filename=image_path) as img:
             # Image is correct
-            return ''
+            if img.format in settings.SUPPORTED_IMG_FORMATS:
+                return ''
+            else:
+                return 'Unsupported mime type'
     except BlobError:
         return (f'Unable to open image: \'{image_path}\': '
                 'No such file or directory')
