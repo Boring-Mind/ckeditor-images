@@ -69,7 +69,8 @@ class ImageProcess(TestCase):
         # self.image_checking_case(
         #     'File is too large. Maximum allowed size is 2.5Mb', 'large.jpg'
         # )
-        self.image_checking_case('Unsupported mime type', 'html_page.html')
+        self.image_checking_case('Unsupported mime type', 'html_page.jpg')
+        self.image_checking_case('Unsupported mime type', 'malicious_js.png')
         self.image_checking_case(
             'No such file or directory', 'false_name.none'
         )

@@ -8,7 +8,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 from wand.image import Image
-from wand.exceptions import BlobError, FileOpenError
+from wand.exceptions import BlobError, CorruptImageError, FileOpenError
 
 from .models import Article
 from .forms import ImageForm
@@ -75,7 +75,7 @@ def check_image(image_path: str) -> str:
     except BlobError:
         return (f'Unable to open image: \'{image_path}\': '
                 'No such file or directory')
-    except FileOpenError:
+    except (FileOpenError, CorruptImageError):
         return 'Unsupported mime type'
 
 
