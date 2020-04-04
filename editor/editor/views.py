@@ -58,11 +58,10 @@ def get_current_domain():
     return current_site.domain
 
 
-def gen_relative_img_url(filename: str) -> str:
+def generate_img_url(filename: str) -> str:
     """Generate relative url link to the new image."""
-    protocol = 'http://'
     domain = get_current_domain()
-    return settings.MEDIA_URL + 'uploads/' + filename
+    return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
 
 
 def get_unique_filename(filename: str) -> str:
@@ -102,18 +101,13 @@ def get_image_data(request) -> Sequence[Tuple[Dict, str]]:
         raise ValidationError
 
 
-def gen_absolute_img_url(img_name: str, request) -> str:
-    rel_url = gen_relative_img_url(img_name)
-    return request.build_absolute_uri(rel_url)
-
-
 def save_image_to_db(request) -> bool:
     image_data, image_name = get_image_data(request)
 
     form = ImageForm(request.POST, image_data)
     if form.is_valid():
         form.save()
-        img_url = gen_absolute_img_url(image_name, request)
+        img_url = generate_img_url(image_name)
         return {'url': img_url}
     else:
         raise ValidationError
