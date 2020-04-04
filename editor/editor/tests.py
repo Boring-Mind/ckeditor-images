@@ -6,6 +6,8 @@ from django.test import TestCase
 from django.conf import settings
 
 import editor.editor.views as views
+from editor.editor.images import ImageUpload
+from django.http.request import HttpRequest
 
 
 class ImageLoad(TestCase):
@@ -45,7 +47,8 @@ class ImageLoad(TestCase):
 
 class ImageProcess(TestCase):
     def filename_is_correct(self, filename: str, ext: str):
-        test_filename = views.generate_name(filename + ext)
+        upload = ImageUpload(HttpRequest())
+        test_filename = upload.generate_name(filename + ext)
         match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
         self.assertNotEqual(match, None, f'Result is: {test_filename}')
 
@@ -53,8 +56,10 @@ class ImageProcess(TestCase):
         return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
 
     def image_checking_case(self, message: str, img_name: str):
+        upload = ImageUpload(HttpRequest())
         img_path = self.make_img_path(img_name)
-        self.assertEqual(message, views.check_image(img_path))
+
+        self.assertEqual(message, upload.check_image(img_path))
 
     def image_checking_not_exists_case(self, img_name: str):
         img_path = self.make_img_path(img_name)
@@ -74,6 +79,7 @@ class ImageProcess(TestCase):
         self.filename_is_correct('.vsd..sd.v.sdv', '.jpg')
 
     def test_filepath_is_correct(self):
+        upload = ImageUpload(HttpRequest())
         img_name = 'image.jpg'
 
         # We are testing only path to the file
@@ -82,7 +88,7 @@ class ImageProcess(TestCase):
         ref_path = os.path.join(settings.UPLOAD_ROOT, img_name)
         ref_path = os.path.split(ref_path)[0]
 
-        test_path = views.generate_path(img_name)
+        test_path = upload.generate_path(img_name)
         test_path = os.path.split(test_path)[0]
 
         self.assertEqual(test_path, ref_path)
@@ -108,7 +114,8 @@ class ImageProcess(TestCase):
         self.image_checking_not_exists_case('image.jpg.jpg')
 
     def test_image_url(self):
+        upload = ImageUpload(HttpRequest())
         filename = 'simple.jpg'
         ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
 
-        self.assertEqual(views.generate_img_url(filename), ref_url)
+        self.assertEqual(upload.generate_img_url(filename), ref_url)
