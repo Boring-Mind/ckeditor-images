@@ -27,18 +27,20 @@ class ImageLoad(TestCase):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
-    def test_return_filenames_on_success_image_upload(self):
+    def test_success_response_doesnt_contain_err_message(self):
         img_path = self.get_image_path('image.jpg')
 
         with open(img_path, 'rb') as image:
-            # response = self.client.post('/upload/', {
-            #     'upload': image
-            # })
-            # response_json = json.loads(response.content)
             response = self.post_image(image)
             
             # There cannot be an error message in a successful request
             self.assertTrue('message' not in response)
+
+    def test_return_filenames_on_success_image_upload(self):
+        img_path = self.get_image_path('image.jpg')
+
+        with open(img_path, 'rb') as image:
+            response = self.post_image(image)
 
             response_url = response['url']
 
