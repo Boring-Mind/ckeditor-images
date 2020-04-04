@@ -7,7 +7,7 @@ from typing import Sequence, Dict, Tuple
 
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
-from django.http import HttpResponseServerError
+from django.http import HttpResponseServerError, HttpResponseNotFound
 from django.shortcuts import render
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
@@ -58,7 +58,7 @@ def get_current_domain():
     return current_site.domain
 
 
-def generate_img_url(filename: str) -> str:
+def gen_relative_img_url(filename: str) -> str:
     """Generate url link to the new image."""
     protocol = 'http://'
     domain = get_current_domain()
@@ -103,13 +103,13 @@ def get_image_data(request) -> Sequence[Tuple[Dict, str]]:
 
 
 def gen_absolute_img_url(img_name: str, request) -> str:
-    rel_url = generate_img_url(img_name)
+    rel_url = gen_relative_img_url(img_name)
     return request.build_absolute_uri(rel_url)
 
 
 def save_image_to_db(request) -> bool:
     image_data, image_name = get_image_data(request)
-    
+
     form = ImageForm(request.POST, image_data)
     if form.is_valid():
         form.save()
@@ -136,4 +136,4 @@ def upload_view(request) -> HttpResponse:
         elif 'multipart/form-data' in request.headers['content_type']:
             return process_images(request)
     else:
-        return HttpResponse(status=404)
+        return HttpResponseNotFound()

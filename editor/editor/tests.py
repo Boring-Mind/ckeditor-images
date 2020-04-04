@@ -111,4 +111,4 @@ class ImageProcess(TestCase):
         filename = 'simple.jpg'
         ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
 
-        self.assertEqual(views.generate_img_url(filename), ref_url)
+        self.assertEqual(views.gen_relative_img_url(filename), ref_url)
