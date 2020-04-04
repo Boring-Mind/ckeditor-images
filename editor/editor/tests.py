@@ -4,6 +4,7 @@ import json
 
 from django.test import TestCase
 from django.conf import settings
+from typing import BinaryIO
 
 import editor.editor.views as views
 from editor.editor.images import ImageUpload
@@ -15,6 +16,12 @@ class ImageLoad(TestCase):
         """Get path to the image in the test folder."""
         img_folder = os.path.join(settings.MEDIA_ROOT, 'test_img')
         return os.path.join(img_folder, img_name)
+    
+    def post_image(self, image: BinaryIO) -> dict:
+        response = self.client.post('/upload/', {
+            'upload': image
+        })
+        return json.loads(response.content)
 
     def test_return_error_on_get_request(self):
         response = self.client.get('/upload/')
@@ -24,15 +31,16 @@ class ImageLoad(TestCase):
         img_path = self.get_image_path('image.jpg')
 
         with open(img_path, 'rb') as image:
-            response = self.client.post('/upload/', {
-                'upload': image
-            })
-            response_json = json.loads(response.content)
+            # response = self.client.post('/upload/', {
+            #     'upload': image
+            # })
+            # response_json = json.loads(response.content)
+            response = self.post_image(image)
             
             # There cannot be an error message in a successful request
-            self.assertTrue('message' not in response_json)
+            self.assertTrue('message' not in response)
 
-            response_url = response_json['url']
+            response_url = response['url']
 
             match = re.fullmatch(
                 "http://127.0.0.1:8000/media/uploads/"
@@ -68,7 +76,7 @@ class ImageProcess(TestCase):
         message = (f'Unable to open image: \'{img_path}\': '
                    'No such file or directory')
         self.image_checking_case(message, img_name)
-    
+
 
     def test_filename_is_correct(self):
         self.filename_is_correct('simple', '.jpg')
