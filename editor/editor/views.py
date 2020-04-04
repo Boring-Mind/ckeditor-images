@@ -3,7 +3,7 @@ from random import randrange
 from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
-from .models import Article
+from editor.editor.models import Article
 from editor.editor.images import ImageUpload
 
 
