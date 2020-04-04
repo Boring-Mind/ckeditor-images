@@ -59,14 +59,16 @@ class ImageProcess(TestCase):
         upload = ImageUpload(HttpRequest())
         img_path = self.make_img_path(img_name)
 
-        self.assertEqual(message, upload.check_image(img_path))
+        result = upload.check_image(img_path)
+
+        self.assertEqual(message, result)
 
     def image_checking_not_exists_case(self, img_name: str):
         img_path = self.make_img_path(img_name)
         message = (f'Unable to open image: \'{img_path}\': '
                    'No such file or directory')
         self.image_checking_case(message, img_name)
-
+    
 
     def test_filename_is_correct(self):
         self.filename_is_correct('simple', '.jpg')
@@ -88,10 +90,10 @@ class ImageProcess(TestCase):
         ref_path = os.path.join(settings.UPLOAD_ROOT, img_name)
         ref_path = os.path.split(ref_path)[0]
 
-        test_path = upload.generate_path(img_name)
-        test_path = os.path.split(test_path)[0]
+        tested_path = upload.generate_path(img_name)
+        tested_path = os.path.split(tested_path)[0]
 
-        self.assertEqual(test_path, ref_path)
+        self.assertEqual(tested_path, ref_path)
 
     def test_image_checking(self):
         self.image_checking_case('Image check completed', 'image.jpg')
