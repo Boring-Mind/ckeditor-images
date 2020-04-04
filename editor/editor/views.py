@@ -3,11 +3,14 @@ from os import path
 from random import randrange
 # from sys import getsizeof
 import imghdr
+from typing import Sequence, Dict, Tuple
 
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponseServerError
 from django.shortcuts import render
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 
 from .models import Article
 from .forms import ImageForm
@@ -86,7 +89,7 @@ def check_image(image_path: str) -> str:
     return 'Unsupported mime type'
 
 
-def get_image_data(request):
+def get_image_data(request) -> Sequence[Tuple[Dict, str]]:
     image = request.FILES['upload']
     filename = request.FILES['upload'].name
 
@@ -94,31 +97,36 @@ def get_image_data(request):
     image.name = filename
 
     if check_image(image.name):
-        return {'image': image}
+        return ({'image': image}, filename)
     else:
-        return {}
+        raise ValidationError
+
+
+def gen_absolute_img_url(img_name: str, request) -> str:
+    rel_url = generate_img_url(img_name)
+    return request.build_absolute_uri(rel_url)
 
 
 def save_image_to_db(request) -> bool:
-    image_data = get_image_data(request)
+    image_data, image_name = get_image_data(request)
+    
     form = ImageForm(request.POST, image_data)
     if form.is_valid():
         form.save()
-        img_url = generate_img_url(image_data['image'].name)
-        img_url = request.build_absolute_uri(img_url)
+        img_url = gen_absolute_img_url(image_name, request)
         return {'url': img_url}
     else:
-        return {}
+        raise ValidationError
 
 
 def process_images(request):
     # print(request.FILES["upload"].size)
 
-    response = save_image_to_db(request)
-    if 'url' in response:
+    try:
+        response = save_image_to_db(request)
         return JsonResponse(response)
-    else:
-        return HttpResponse(status=500)
+    except ValidationError:
+        return HttpResponseServerError()
 
 
 def upload_view(request) -> HttpResponse:
