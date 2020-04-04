@@ -1,21 +1,11 @@
-import imghdr
-from os import path
 from random import randrange
-from typing import Sequence, Dict, Tuple
 
-import nanoid
-from django.conf import settings
-from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
-from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseNotFound
+from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
-from .forms import ImageForm
 from .models import Article
 from editor.editor.images import ImageUpload
 
-
-# from sys import getsizeof
 
 def editor_view(request):
     return render(request, 'editor.html', {})
