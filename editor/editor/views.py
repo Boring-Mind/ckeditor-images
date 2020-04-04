@@ -59,10 +59,10 @@ def get_current_domain():
 
 
 def gen_relative_img_url(filename: str) -> str:
-    """Generate url link to the new image."""
+    """Generate relative url link to the new image."""
     protocol = 'http://'
     domain = get_current_domain()
-    return protocol + domain + settings.MEDIA_URL + 'uploads/' + filename
+    return settings.MEDIA_URL + 'uploads/' + filename
 
 
 def get_unique_filename(filename: str) -> str:
