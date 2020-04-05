@@ -23,6 +23,17 @@ class ImageLoad(TestCase):
         })
         return json.loads(response.content)
 
+    def compare_with_reference(self, response_url: str) -> bool:
+        """Reference url is a regex string.
+
+        Filename must be something like this: 7gXL4258iz7ePBG.jpg
+        And that requirement is satisfied by a regex part.
+        """
+        ref_url = ("http://127.0.0.1:8000/media/uploads/"
+                   r"[\w-]{15}\.\w{3,4}")
+        match = re.fullmatch(ref_url, response_url)
+        return match is not None
+
     def test_return_error_on_get_request(self):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
@@ -33,26 +44,21 @@ class ImageLoad(TestCase):
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
             
-            # There cannot be an error message in a successful request
-            self.assertTrue('message' not in response)
+        # There cannot be an error message in a successful request
+        self.assertTrue('message' not in response)
 
     def test_return_filenames_on_success_image_upload(self):
         img_path = self.get_image_path('image.jpg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
+        response_url = response['url']
 
-            response_url = response['url']
-
-            match = re.fullmatch(
-                "http://127.0.0.1:8000/media/uploads/"
-                r"[\w-]{15}\.\w{3,4}",
-                response_url
-            )
-
-            self.assertNotEqual(
-                match, None, f"Function returns {response_url}"
-            )
+        self.assertTrue(
+            self.compare_with_reference(response_url),
+            "Url received from the response doesn't match to the reference.\n"
+            f"Received url: {response_url}"
+        )
 
 
 class ImageProcess(TestCase):
