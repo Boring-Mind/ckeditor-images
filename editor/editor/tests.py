@@ -132,8 +132,11 @@ class ImageProcess(TestCase):
         self.image_checking_not_exists_case('image.jpg.jpg')
 
     def test_image_url(self):
+        """Test image url generation."""
         upload = ImageUpload(HttpRequest())
         filename = 'simple.jpg'
         ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
 
-        self.assertEqual(upload.generate_img_url(filename), ref_url)
+        tested_url = upload.generate_img_url(filename)
+
+        self.assertEqual(tested_url, ref_url)
