@@ -9,6 +9,7 @@ from typing import BinaryIO
 import editor.editor.views as views
 from editor.editor.images import ImageUpload
 from django.http.request import HttpRequest
+import unittest
 
 
 class ImageLoad(TestCase):
@@ -45,7 +46,18 @@ class ImageLoad(TestCase):
             response = self.post_image(image)
             
         # There cannot be an error message in a successful request
-        self.assertTrue('message' not in response)
+        self.assertTrue('error' not in response)
+
+    @unittest.expectedFailure
+    def test_failed_response_doesnt_contain_img_url(self):
+        img_path = self.get_image_path('html_page.jpg')
+
+        with open(img_path, 'rb') as image:
+            response = self.post_image(image)
+            
+        # There cannot be an urls in a failed request
+        self.assertTrue('url' not in response)
+        self.assertTrue('urls' not in response)
 
     def test_return_filenames_on_success_image_upload(self):
         img_path = self.get_image_path('image.jpg')
