@@ -24,6 +24,14 @@ class ImageLoad(TestCase):
         })
         return json.loads(response.content)
 
+    def load_image_to_the_server(self, image_name: str) -> dict:
+        img_path = self.get_image_path(image_name)
+
+        with open(img_path, 'rb') as image:
+            response = self.post_image(image)
+
+        return response
+
     def compare_with_reference(self, response_url: str) -> bool:
         """Reference url is a regex string.
 
@@ -72,6 +80,23 @@ class ImageLoad(TestCase):
             f"Received url: {response_url}"
         )
 
+    def get_error_from_response(self, response) -> str:
+        return response['error']['message']
+
+    @unittest.expectedFailure
+    def test_return_correct_error_on_failed_image_upload(self):
+        img_path = self.get_image_path('icon.svg')
+
+        with open(img_path, 'rb') as image:
+            response = self.post_image(image)
+        error = self.get_error_from_response(response)
+
+        ref_error = (
+            'Unsupported image type. '
+            'We can handle only jpg, png, gif, webp, tiff.'
+        )
+        self.assertEqual(ref_error, error)
+
 
 class ImageProcess(TestCase):
     def filename_is_correct(self, filename: str, ext: str):
@@ -82,6 +107,9 @@ class ImageProcess(TestCase):
 
     def make_img_path(self, img_name: str) -> str:
         return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
+
+    def get_error_message_from_response(self, response: dict) -> str:
+        return response['error']['message']
 
     def image_checking_case(self, message: str, img_name: str):
         upload = ImageUpload(HttpRequest())
