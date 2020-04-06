@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse, HttpResponseServerError
 
 from editor.editor.forms import ImageForm
+from editor.editor.image_process import ImageProcess
 
 
 class ImageUpload():
@@ -42,7 +43,7 @@ class ImageUpload():
 
     def get_unique_filename(self, filename: str) -> str:
         """Check generated filename for uniqueness."""
-        new_name = self.generate_name(filename)
+        new_name = ImageProcess.generate_name(filename)
         new_path = self.generate_path(new_name)
 
         while path.exists(new_path):

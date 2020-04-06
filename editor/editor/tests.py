@@ -1,18 +1,19 @@
 import os
-import re
 import json
-
-from django.test import TestCase
-from django.conf import settings
+import re
 from typing import BinaryIO
+import unittest
+
+from django.conf import settings
+from django.http.request import HttpRequest
+from django.test import TestCase
 
 import editor.editor.views as views
 from editor.editor.images import ImageUpload
-from django.http.request import HttpRequest
-import unittest
+from editor.editor.image_process import ImageProcess
 
 
-class ImageLoad(TestCase):
+class ImageLoadTest(TestCase):
     def get_image_path(self, img_name: str) -> str:
         """Get path to the image in the test folder."""
         img_folder = os.path.join(settings.MEDIA_ROOT, 'test_img')
@@ -98,10 +99,10 @@ class ImageLoad(TestCase):
         self.assertEqual(ref_error, error)
 
 
-class ImageProcess(TestCase):
+class ImageProcessTest(TestCase):
     def filename_is_correct(self, filename: str, ext: str):
-        upload = ImageUpload(HttpRequest())
-        test_filename = upload.generate_name(filename + ext)
+        # upload = ImageUpload(HttpRequest())
+        test_filename = ImageProcess.generate_name(filename + ext)
         match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
         self.assertNotEqual(match, None, f'Result is: {test_filename}')
 
