@@ -8,7 +8,6 @@ from django.conf import settings
 from django.http.request import HttpRequest
 from django.test import TestCase
 
-import editor.editor.views as views
 from editor.editor.images import ImageUpload
 from editor.editor.image_process import ImageProcess
 

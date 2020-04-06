@@ -2,7 +2,6 @@ from os import path
 
 import nanoid
 from django.conf import settings
-from django.contrib.sites.models import Site
 from editor.webutils.urlutils import URLUtils
 
 
