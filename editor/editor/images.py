@@ -16,11 +16,6 @@ class ImageUpload():
         # self.image_name = ''
         self.request = request
 
-    # def generate_img_url(self, filename: str) -> str:
-    #     """Generate relative url link to the new image."""
-    #     domain = ImageProcess.URLParsing.get_current_domain()
-    #     return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
-
     def check_image(self, image_path: str) -> str:
         """Test image for the correct filetype."""
         if not path.isfile(image_path):
