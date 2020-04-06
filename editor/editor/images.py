@@ -26,16 +26,6 @@ class ImageUpload():
         domain = self.get_current_domain()
         return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
 
-    # def get_unique_filename(self, filename: str) -> str:
-    #     """Check generated filename for uniqueness."""
-    #     new_name = ImageProcess.generate_name(filename)
-    #     new_path = ImageProcess.generate_path(new_name)
-
-    #     while path.exists(new_path):
-    #         new_path = ImageProcess.generate_path(new_name)
-
-    #     return new_name
-
     def check_image(self, image_path: str) -> str:
         """Test image for the correct filetype."""
         if not path.isfile(image_path):
