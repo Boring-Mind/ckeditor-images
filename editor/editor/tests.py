@@ -8,7 +8,6 @@ from django.conf import settings
 from django.http.request import HttpRequest
 from django.test import TestCase
 
-from editor.editor.images import ImageUpload
 from editor.editor.image_process import ImageProcess
 
 
@@ -111,10 +110,9 @@ class ImageProcessTest(TestCase):
         return response['error']['message']
 
     def image_checking_case(self, message: str, img_name: str):
-        upload = ImageUpload(HttpRequest())
         img_path = self.make_img_path(img_name)
 
-        result = upload.check_image(img_path)
+        result = ImageProcess.check_image(img_path)
 
         self.assertEqual(message, result)
 
@@ -171,7 +169,6 @@ class ImageProcessTest(TestCase):
 
     def test_image_url(self):
         """Test image url generation."""
-        # upload = ImageUpload(HttpRequest())
         filename = 'simple.jpg'
         ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
 

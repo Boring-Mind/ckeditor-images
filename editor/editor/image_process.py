@@ -1,7 +1,9 @@
+import imghdr
 from os import path
 
 import nanoid
 from django.conf import settings
+
 from editor.webutils.urlutils import URLUtils
 
 
@@ -40,3 +42,19 @@ class ImageProcess:
         return (
             'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
         )
+
+    def check_image(image_path: str) -> str:
+        """Test image for the correct filetype."""
+        if not path.isfile(image_path):
+            # logging.error(f'Unable to open image: \'{image_path}\': '
+            #         'No such file or directory')
+            return (f'Unable to open image: \'{image_path}\': '
+                    'No such file or directory')
+
+        img_type = imghdr.what(image_path)
+        if img_type in settings.SUPPORTED_IMG_FORMATS:
+            # logging.info('Image check completed')
+            return 'Image check completed'
+            
+        # logging.error('Unsupported mime type of image')
+        return 'Unsupported mime type'
