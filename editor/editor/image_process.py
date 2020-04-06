@@ -2,6 +2,7 @@ from os import path
 
 import nanoid
 from django.conf import settings
+from django.contrib.sites.models import Site
 
 
 class ImageProcess:
@@ -32,3 +33,7 @@ class ImageProcess:
             new_path = ImageProcess.generate_path(new_name)
 
         return new_name
+
+    class URLParsing:
+        def get_current_domain():
+            return Site.objects.get_current().domain

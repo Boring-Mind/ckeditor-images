@@ -17,13 +17,9 @@ class ImageUpload():
         # self.image_name = ''
         self.request = request
 
-    def get_current_domain(self):
-        current_site = Site.objects.get_current()
-        return current_site.domain
-
     def generate_img_url(self, filename: str) -> str:
         """Generate relative url link to the new image."""
-        domain = self.get_current_domain()
+        domain = ImageProcess.URLParsing.get_current_domain()
         return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
 
     def check_image(self, image_path: str) -> str:
