@@ -17,10 +17,10 @@ class ImageUpload():
         # self.image_name = ''
         self.request = request
 
-    def generate_img_url(self, filename: str) -> str:
-        """Generate relative url link to the new image."""
-        domain = ImageProcess.URLParsing.get_current_domain()
-        return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
+    # def generate_img_url(self, filename: str) -> str:
+    #     """Generate relative url link to the new image."""
+    #     domain = ImageProcess.URLParsing.get_current_domain()
+    #     return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
 
     def check_image(self, image_path: str) -> str:
         """Test image for the correct filetype."""
@@ -56,7 +56,7 @@ class ImageUpload():
         form = ImageForm(self.request.POST, image_data)
         if form.is_valid():
             form.save()
-            result_url = self.generate_img_url(image_name)
+            result_url = ImageProcess.generate_img_url(image_name)
             return {'url': result_url}
         else:
             raise ValidationError

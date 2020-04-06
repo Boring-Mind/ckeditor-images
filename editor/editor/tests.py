@@ -172,10 +172,10 @@ class ImageProcessTest(TestCase):
 
     def test_image_url(self):
         """Test image url generation."""
-        upload = ImageUpload(HttpRequest())
+        # upload = ImageUpload(HttpRequest())
         filename = 'simple.jpg'
         ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
 
-        tested_url = upload.generate_img_url(filename)
+        tested_url = ImageProcess.generate_img_url(filename)
 
         self.assertEqual(tested_url, ref_url)

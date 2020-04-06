@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'editor.editor',
     'django.contrib.sites',
+    'editor.webutils',
 ]
 
 MIDDLEWARE = [

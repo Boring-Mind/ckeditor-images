@@ -3,6 +3,7 @@ from os import path
 import nanoid
 from django.conf import settings
 from django.contrib.sites.models import Site
+from editor.webutils.urlutils import URLUtils
 
 
 class ImageProcess:
@@ -34,6 +35,9 @@ class ImageProcess:
 
         return new_name
 
-    class URLParsing:
-        def get_current_domain():
-            return Site.objects.get_current().domain
+    def generate_img_url(filename: str) -> str:
+        """Generate relative url link to the new image."""
+        domain = URLUtils.get_current_domain()
+        return (
+            'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
+        )
