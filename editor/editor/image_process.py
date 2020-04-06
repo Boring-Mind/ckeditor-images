@@ -22,3 +22,13 @@ class ImageProcess:
     def generate_path(filename: str) -> str:
         """Generate absolute path to new image."""
         return path.join(settings.UPLOAD_ROOT, filename)
+
+    def get_unique_filename(filename: str) -> str:
+        """Check generated filename for uniqueness."""
+        new_name = ImageProcess.generate_name(filename)
+        new_path = ImageProcess.generate_path(new_name)
+
+        while path.exists(new_path):
+            new_path = ImageProcess.generate_path(new_name)
+
+        return new_name
