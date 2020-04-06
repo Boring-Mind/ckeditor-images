@@ -101,7 +101,6 @@ class ImageLoadTest(TestCase):
 
 class ImageProcessTest(TestCase):
     def filename_is_correct(self, filename: str, ext: str):
-        # upload = ImageUpload(HttpRequest())
         test_filename = ImageProcess.generate_name(filename + ext)
         match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
         self.assertNotEqual(match, None, f'Result is: {test_filename}')
@@ -138,7 +137,6 @@ class ImageProcessTest(TestCase):
         self.filename_is_correct('.vsd..sd.v.sdv', '.jpg')
 
     def test_filepath_is_correct(self):
-        upload = ImageUpload(HttpRequest())
         img_name = 'image.jpg'
 
         # We are testing only path to the file
@@ -147,7 +145,7 @@ class ImageProcessTest(TestCase):
         ref_path = os.path.join(settings.UPLOAD_ROOT, img_name)
         ref_path = os.path.split(ref_path)[0]
 
-        tested_path = upload.generate_path(img_name)
+        tested_path = ImageProcess.generate_path(img_name)
         tested_path = os.path.split(tested_path)[0]
 
         self.assertEqual(tested_path, ref_path)

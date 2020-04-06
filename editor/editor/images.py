@@ -26,17 +26,13 @@ class ImageUpload():
         domain = self.get_current_domain()
         return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
 
-    def generate_path(self, filename: str) -> str:
-        """Generate absolute path to new image."""
-        return path.join(settings.UPLOAD_ROOT, filename)
-
     def get_unique_filename(self, filename: str) -> str:
         """Check generated filename for uniqueness."""
         new_name = ImageProcess.generate_name(filename)
-        new_path = self.generate_path(new_name)
+        new_path = ImageProcess.generate_path(new_name)
 
         while path.exists(new_path):
-            new_path = self.generate_path(new_name)
+            new_path = ImageProcess.generate_path(new_name)
 
         return new_name
 
