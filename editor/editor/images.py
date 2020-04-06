@@ -26,17 +26,6 @@ class ImageUpload():
         domain = self.get_current_domain()
         return 'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
 
-    def generate_name(self, filename: str) -> str:
-        """Generate filename for new image.
-
-        Resulted filename looks like that: nMcsadvknv.jpg
-        """
-        extension = path.splitext(filename)[1]
-        if extension == '':
-            extension = filename
-        new_name = nanoid.generate(size=15)
-        return new_name + extension
-
     def generate_path(self, filename: str) -> str:
         """Generate absolute path to new image."""
         return path.join(settings.UPLOAD_ROOT, filename)
