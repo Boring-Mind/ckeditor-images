@@ -1,18 +1,18 @@
 import os
 import json
 import re
-from typing import BinaryIO
+from typing import BinaryIO, Tuple
 import unittest
+from unittest.mock import patch
 
 from django.conf import settings
-from django.http.request import HttpRequest
 from django.test import TestCase
 
 from editor.editor.image_process import ImageProcess
 
 
-class ImageLoadTest(TestCase):
-    def get_image_path(self, img_name: str) -> str:
+class ImageUploadTest(TestCase):
+    def get_test_image_path(self, img_name: str) -> str:
         """Get path to the image in the test folder."""
         img_folder = os.path.join(settings.MEDIA_ROOT, 'test_img')
         return os.path.join(img_folder, img_name)
@@ -23,16 +23,21 @@ class ImageLoadTest(TestCase):
         })
         return json.loads(response.content)
 
-    def load_image_to_the_server(self, image_name: str) -> dict:
-        img_path = self.get_image_path(image_name)
+    def open_image_and_post_it(self, image_name: str) -> dict:
+        """Open an image with the given name, post it and get a parsed json response.
+        
+        Output will be the same as in the post_image function:
+        dict object with json response content.
+        """
+        path = self.get_test_image_path(image_name)
 
-        with open(img_path, 'rb') as image:
+        with open(path, 'rb') as image:
             response = self.post_image(image)
 
         return response
 
-    def compare_with_reference(self, response_url: str) -> bool:
-        """Reference url is a regex string.
+    def check_response_url(self, response_url: str):
+        """If the url in the response is not correct, raise an AssertError.
 
         Filename must be something like this: 7gXL4258iz7ePBG.jpg
         And that requirement is satisfied by a regex part.
@@ -40,14 +45,18 @@ class ImageLoadTest(TestCase):
         ref_url = ("http://127.0.0.1:8000/media/uploads/"
                    r"[\w-]{15}\.\w{3,4}")
         match = re.fullmatch(ref_url, response_url)
-        return match is not None
+        self.assertTrue(
+            match is not None,
+            "Image url received from the response is not correct.\n"
+            f"Received url: {response_url}"
+        )
 
     def test_return_error_on_get_request(self):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
     def test_success_response_doesnt_contain_err_message(self):
-        img_path = self.get_image_path('image.jpg')
+        img_path = self.get_test_image_path('image.jpg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
@@ -57,7 +66,7 @@ class ImageLoadTest(TestCase):
 
     @unittest.expectedFailure
     def test_failed_response_doesnt_contain_img_url(self):
-        img_path = self.get_image_path('html_page.jpg')
+        img_path = self.get_test_image_path('html_page.jpg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
@@ -67,24 +76,20 @@ class ImageLoadTest(TestCase):
         self.assertTrue('urls' not in response)
 
     def test_return_filenames_on_success_image_upload(self):
-        img_path = self.get_image_path('image.jpg')
+        img_path = self.get_test_image_path('image.jpg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
         response_url = response['url']
 
-        self.assertTrue(
-            self.compare_with_reference(response_url),
-            "Url received from the response doesn't match to the reference.\n"
-            f"Received url: {response_url}"
-        )
+        self.check_response_url(response_url)
 
     def get_error_from_response(self, response) -> str:
         return response['error']['message']
 
     @unittest.expectedFailure
     def test_return_correct_error_on_failed_image_upload(self):
-        img_path = self.get_image_path('icon.svg')
+        img_path = self.get_test_image_path('icon.svg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
@@ -96,12 +101,51 @@ class ImageLoadTest(TestCase):
         )
         self.assertEqual(ref_error, error)
 
+    @classmethod
+    def split_filename(cls, filename: str):
+        filename, ext = os.path.splitext(filename)
+        if ext == '':
+            filename, ext = ext, filename
+        return (filename, ext)
 
-class ImageProcessTest(TestCase):
-    def filename_is_correct(self, filename: str, ext: str):
-        test_filename = ImageProcess.generate_name(filename + ext)
-        match = re.fullmatch(r"[\w-]{15}" + ext, test_filename)
-        self.assertNotEqual(match, None, f'Result is: {test_filename}')
+    @classmethod
+    def fullmatch_filename(cls, filename: str, ext: str):
+        """Return match object if the filename fits to the regex, or None if not.
+
+        Example of the filename param:
+        'simple.jpg'
+
+        Example of the ext param:
+        '.jpg'
+        """
+        return re.fullmatch(r"[\w-]{15}" + ext, filename)
+    
+    @classmethod
+    def get_extension(cls, filename: str) -> str:
+        """Return file extension.
+        
+        Example of the filename param:
+        'simple.jpg'
+        
+        Example of the return value:
+        '.jpg'
+        """
+        return ImageUploadTest.split_filename(filename)[1]
+
+    def filename_is_correct(self, filename: str):
+        """Raise AssertException if the filename is not correct.
+        
+        Example of the filename param:
+        'simple.jpg'
+
+        Correct filename would be:
+        '2ZxeY-Fqr_TZBx0.jpg'
+        """
+        img_name = ImageProcess(filename).filename
+
+        ext = ImageUploadTest.get_extension(img_name)
+        match = self.fullmatch_filename(img_name, ext)
+        self.assertNotEqual(match, None, f'Result is: {img_name}')
 
     def make_img_path(self, img_name: str) -> str:
         return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
@@ -109,12 +153,20 @@ class ImageProcessTest(TestCase):
     def get_error_message_from_response(self, response: dict) -> str:
         return response['error']['message']
 
-    def image_checking_case(self, message: str, img_name: str):
-        img_path = self.make_img_path(img_name)
+    def image_checking_case(self, expected_result: str, img_name: str):
+        # img_path = self.make_img_path(img_name)
 
-        result = ImageProcess.check_image(img_path)
+        path = self.make_img_path(img_name)
 
-        self.assertEqual(message, result)
+        with patch(
+            'editor.editor.image_process.ImageProcess.generate_path',
+            return_value=path
+        ):
+            instance = ImageProcess(img_name)
+            actual_result = instance.check_image()
+            instance.generate_path.assert_called()
+
+        self.assertEqual(expected_result, actual_result)
 
     def image_checking_not_exists_case(self, img_name: str):
         img_path = self.make_img_path(img_name)
@@ -124,14 +176,14 @@ class ImageProcessTest(TestCase):
 
 
     def test_filename_is_correct(self):
-        self.filename_is_correct('simple', '.jpg')
-        self.filename_is_correct('simple', '.jpeg')
-        self.filename_is_correct('simple', '.png')
-        self.filename_is_correct('simple', '.gif')
-        self.filename_is_correct('simple', '.webp')
-        self.filename_is_correct('simple', '.tiff')
-        self.filename_is_correct('', '.jpg')
-        self.filename_is_correct('.vsd..sd.v.sdv', '.jpg')
+        self.filename_is_correct('simple.jpg')
+        self.filename_is_correct('simple.jpeg')
+        self.filename_is_correct('simple.png')
+        self.filename_is_correct('simple.giff')
+        self.filename_is_correct('simple.webp')
+        self.filename_is_correct('simple.tiff')
+        self.filename_is_correct('.jpg')
+        self.filename_is_correct('.vsd..sd.v.sdv.jpg')
 
     def test_filepath_is_correct(self):
         img_name = 'image.jpg'
@@ -169,9 +221,10 @@ class ImageProcessTest(TestCase):
 
     def test_image_url(self):
         """Test image url generation."""
-        filename = 'simple.jpg'
-        ref_url = 'http://127.0.0.1:8000/media/uploads/' + filename
+        impr_instance = ImageProcess('simple.jpg')
+        img_name = impr_instance.filename
+        ref_url = f'http://127.0.0.1:8000/media/uploads/{img_name}'
 
-        tested_url = ImageProcess.generate_img_url(filename)
+        tested_url = impr_instance.generate_img_url()
 
         self.assertEqual(tested_url, ref_url)

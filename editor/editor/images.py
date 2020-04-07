@@ -10,16 +10,16 @@ from editor.editor.image_process import ImageProcess
 class ImageUpload():
     def __init__(self, request):
         self.request = request
-        self.impr_instance = ImageProcess()
+        self.impr_instance = None
 
     def get_image_data(self) -> Sequence[Tuple[Dict, str]]:
         image = self.request.FILES['upload']
         filename = self.request.FILES['upload'].name
 
-        filename = ImageProcess.get_unique_filename(filename)
-        image.name = filename
+        self.impr_instance = ImageProcess(filename)
+        image.name = self.impr_instance.filename
 
-        if ImageProcess.check_image(image.name):
+        if self.impr_instance.check_image():
             return ({'image': image}, filename)
         else:
             raise ValidationError
@@ -30,7 +30,7 @@ class ImageUpload():
         form = ImageForm(self.request.POST, image_data)
         if form.is_valid():
             form.save()
-            result_url = ImageProcess.generate_img_url(image_name)
+            result_url = self.impr_instance.generate_img_url()
             return {'url': result_url}
         else:
             raise ValidationError

@@ -8,10 +8,24 @@ from editor.webutils.urlutils import URLUtils
 
 
 class ImageProcess:
-    def __init__(self):
-        pass
+    def __init__(self, filename: str):
+        self.__filename = ''
+        self.filename = self.get_unique_filename(filename)
 
-    def generate_name(filename: str) -> str:
+    def _get_filename(self):
+        return self.__filename
+
+    def _set_filename(self, filename: str) -> bool:
+        try:
+            self.__filename = filename
+            return True
+        except Exception:
+            return False
+
+    filename = property(_get_filename, _set_filename)
+
+    @classmethod
+    def generate_name(cls, filename: str) -> str:
         """Generate filename for new image.
 
         Resulted filename looks like that: nMcsadvknv.jpg
@@ -20,31 +34,36 @@ class ImageProcess:
         if extension == '':
             extension = filename
         new_name = nanoid.generate(size=15)
+
         return new_name + extension
 
-    def generate_path(filename: str) -> str:
+    @classmethod
+    def generate_path(cls, filename: str) -> str:
         """Generate absolute path to new image."""
         return path.join(settings.UPLOAD_ROOT, filename)
 
-    def get_unique_filename(filename: str) -> str:
+    def get_unique_filename(self, filename: str) -> str:
         """Check generated filename for uniqueness."""
         new_name = ImageProcess.generate_name(filename)
-        new_path = ImageProcess.generate_path(new_name)
+        new_path = ImageProcess.generate_path(filename)
 
-        while path.exists(new_path):
+        if path.exists(new_path):
             new_path = ImageProcess.generate_path(new_name)
 
+        self.filename = new_name
         return new_name
 
-    def generate_img_url(filename: str) -> str:
+    def generate_img_url(self) -> str:
         """Generate relative url link to the new image."""
         domain = URLUtils.get_current_domain()
+        filename = self.filename
         return (
-            'http://' + domain + settings.MEDIA_URL + 'uploads/' + filename
+            f'http://{domain}{settings.MEDIA_URL}uploads/{filename}'
         )
 
-    def check_image(image_path: str) -> str:
+    def check_image(self) -> str:
         """Test image for the correct filetype."""
+        image_path = ImageProcess.generate_path(self.filename)
         if not path.isfile(image_path):
             # logging.error(f'Unable to open image: \'{image_path}\': '
             #         'No such file or directory')
@@ -55,6 +74,6 @@ class ImageProcess:
         if img_type in settings.SUPPORTED_IMG_FORMATS:
             # logging.info('Image check completed')
             return 'Image check completed'
-            
+        
         # logging.error('Unsupported mime type of image')
         return 'Unsupported mime type'
