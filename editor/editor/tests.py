@@ -72,7 +72,7 @@ class IntegrationTests(TestCase):
     # -----------------------------------------
     # TESTS
 
-    def test_return_error_on_get_request(self):
+    def test_return_404_on_get_request(self):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
@@ -88,10 +88,7 @@ class IntegrationTests(TestCase):
         self.assertTrue('urls' not in response)
 
     def test_return_filenames_on_success_image_upload(self):
-        img_path = TestHelperMethods.get_test_image_path('image.jpg')
-
-        with open(img_path, 'rb') as image:
-            response = self.post_image(image)
+        response = self.open_image_and_post_it('image.jpg')
         response_url = response['url']
 
         self.check_received_url(response_url)
@@ -111,9 +108,7 @@ class IntegrationTests(TestCase):
         self.assertEqual(ref_error, error)
 
     def test_success_response_doesnt_contain_err_message(self):
-        img_path = TestHelperMethods.get_test_image_path('image.jpg')
-        with open(img_path, 'rb') as image:
-            response = self.post_image(image)
+        response = self.open_image_and_post_it('image.jpg')
         # There cannot be an error message in a successful request
         self.assertTrue('error' not in response)
 
@@ -212,7 +207,7 @@ class ImageUploadTest(TestCase):
 
         self.assertEqual(tested_path, ref_path)
 
-    def test_image_check(self):
+    def test_check_image(self):
         self.case_check_image('Image check completed', 'image.jpg')
         self.case_check_image('Image check completed', 'image.png')
         self.case_check_image('Image check completed', 'image.webp')
