@@ -191,8 +191,9 @@ class UnitTests(TestCase):
     def case_check_image(self, expected_result: str, img_name: str):
         path = UnitTests.path_to_test_img(img_name)
 
+        # print(dir())
         with patch(
-            'editor.editor.image_process.ImageProcess.generate_path',
+            'editor.editor.tests.ImageProcess.generate_path',
             return_value=path
         ):
             instance = ImageProcess(img_name)
