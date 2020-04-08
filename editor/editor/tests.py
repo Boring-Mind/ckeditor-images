@@ -54,7 +54,14 @@ class IntegrationTests(TestCase):
         """Get an error message from received jsonreponse."""
         return response['error']['message']
 
-    def check_received_url(self, response_url: str):
+    # -----------------------------------------
+    # CASES
+    # 
+    # Description:
+    # 1. Needed to reduce code duplication
+    # 2. Always contains assert statement
+
+    def case_check_received_url(self, response_url: str):
         """If the url in the response is not correct, raise an AssertError.
 
         Filename must be something like this: 7gXL4258iz7ePBG.jpg
@@ -91,7 +98,7 @@ class IntegrationTests(TestCase):
         response = self.open_image_and_post_it('image.jpg')
         response_url = response['url']
 
-        self.check_received_url(response_url)
+        self.case_check_received_url(response_url)
 
     @unittest.expectedFailure
     def test_return_correct_error_on_failed_image_upload(self):
@@ -113,7 +120,17 @@ class IntegrationTests(TestCase):
         self.assertTrue('error' not in response)
 
 
-class ImageUploadTest(TestCase):
+class UnitTests(TestCase):
+    # -----------------------------------------
+    # HELPER METHODS
+    # 
+    # Description:
+    # 1. Needed to reduce code duplication
+    # 2. They usually are class methods, and get cls argument instead of self
+    
+    # -----------------------------------------
+    # Working with filesystem
+    # -----------------------------------------
     @classmethod
     def split_filename(cls, filename: str):
         filename, ext = os.path.splitext(filename)
@@ -143,7 +160,18 @@ class ImageUploadTest(TestCase):
         Example of the return value:
         '.jpg'
         """
-        return ImageUploadTest.split_filename(filename)[1]
+        return UnitTests.split_filename(filename)[1]
+
+    @classmethod
+    def path_to_test_img(cls, img_name: str) -> str:
+        return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
+
+    # -----------------------------------------
+    # CASES
+    # 
+    # Description:
+    # 1. Needed to reduce code duplication
+    # 2. Always contains assert statement
 
     def case_filename_check(self, filename: str):
         """Raise AssertException if the filename is not correct.
@@ -156,15 +184,12 @@ class ImageUploadTest(TestCase):
         """
         img_name = ImageProcess(filename).filename
 
-        ext = ImageUploadTest.get_extension(img_name)
-        match = self.fullmatch_filename(img_name, ext)
+        ext = UnitTests.get_extension(img_name)
+        match = UnitTests.fullmatch_filename(img_name, ext)
         self.assertNotEqual(match, None, f'Result is: {img_name}')
 
-    def make_img_path(self, img_name: str) -> str:
-        return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
-
     def case_check_image(self, expected_result: str, img_name: str):
-        path = self.make_img_path(img_name)
+        path = UnitTests.path_to_test_img(img_name)
 
         with patch(
             'editor.editor.image_process.ImageProcess.generate_path',
@@ -177,11 +202,13 @@ class ImageUploadTest(TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def case_image_not_exists(self, img_name: str):
-        img_path = self.make_img_path(img_name)
+        img_path = UnitTests.path_to_test_img(img_name)
         message = (f'Unable to open image: \'{img_path}\': '
                    'No such file or directory')
         self.case_check_image(message, img_name)
-
+    
+    # -----------------------------------------
+    # TESTS
 
     def test_filename_check(self):
         self.case_filename_check('simple.jpg')
