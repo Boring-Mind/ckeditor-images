@@ -24,15 +24,6 @@ class TestHelperMethods():
 class IntegrationTests(TestCase):
     # -----------------------------------------
     # HELPER METHODS
-
-    # -----------------------------------------
-    # Filesystem operations
-    # -----------------------------------------
-
-    def get_test_image_path(self, img_name: str) -> str:
-        """Get path to the image in the test folder."""
-        img_folder = os.path.join(settings.MEDIA_ROOT, 'test_img')
-        return os.path.join(img_folder, img_name)
     
     # -----------------------------------------
     # Post images
@@ -50,7 +41,7 @@ class IntegrationTests(TestCase):
         Output will be the same as in the post_image function:
         dict object with json response content.
         """
-        path = self.get_test_image_path(image_name)
+        path = TestHelperMethods.get_test_image_path(image_name)
         with open(path, 'rb') as image:
             response = self.post_image(image)
         return response
@@ -87,7 +78,7 @@ class IntegrationTests(TestCase):
 
     @unittest.expectedFailure
     def test_failed_response_doesnt_contain_img_url(self):
-        img_path = self.get_test_image_path('html_page.jpg')
+        img_path = TestHelperMethods.get_test_image_path('html_page.jpg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
@@ -97,7 +88,7 @@ class IntegrationTests(TestCase):
         self.assertTrue('urls' not in response)
 
     def test_return_filenames_on_success_image_upload(self):
-        img_path = self.get_test_image_path('image.jpg')
+        img_path = TestHelperMethods.get_test_image_path('image.jpg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
@@ -107,7 +98,7 @@ class IntegrationTests(TestCase):
 
     @unittest.expectedFailure
     def test_return_correct_error_on_failed_image_upload(self):
-        img_path = self.get_test_image_path('icon.svg')
+        img_path = TestHelperMethods.get_test_image_path('icon.svg')
 
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
@@ -120,7 +111,7 @@ class IntegrationTests(TestCase):
         self.assertEqual(ref_error, error)
 
     def test_success_response_doesnt_contain_err_message(self):
-        img_path = self.get_test_image_path('image.jpg')
+        img_path = TestHelperMethods.get_test_image_path('image.jpg')
         with open(img_path, 'rb') as image:
             response = self.post_image(image)
         # There cannot be an error message in a successful request
@@ -178,8 +169,6 @@ class ImageUploadTest(TestCase):
         return os.path.join(settings.MEDIA_ROOT, 'test_img', img_name)
 
     def case_check_image(self, expected_result: str, img_name: str):
-        # img_path = self.make_img_path(img_name)
-
         path = self.make_img_path(img_name)
 
         with patch(
