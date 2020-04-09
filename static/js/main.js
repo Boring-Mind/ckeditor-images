@@ -1,6 +1,7 @@
 $(document).ready(function(){
     let ckeditor;
     let csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    let maxArticleLength = 15000;
 
     // Set and show ckeditor instance. Save instance in variable.
     ClassicEditor
@@ -49,7 +50,10 @@ $(document).ready(function(){
           console.error( error );
       } );
 
-    
+    getArticleLength = function() {
+      data = ckeditor.getData();
+      return data.length;
+    };
 
     $('#editor-submit').click(function() {
       httpRequest = new XMLHttpRequest();
@@ -72,12 +76,21 @@ $(document).ready(function(){
         console.log(response.world);
       };
 
-      // Setting and sending ajax request
-      httpRequest.open('POST', url, true);
-      httpRequest.setRequestHeader('X-Content-Type-Options', 'nosniff');
-      httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      httpRequest.setRequestHeader('X-CSRFToken', csrf_token);
-      httpRequest.responseType = "json";
-      httpRequest.send('article_body=' + encodeURIComponent(ckeditor.getData()));
+      let articleLength = getArticleLength();
+      if (articleLength <= maxArticleLength) {
+
+        // Setting and sending ajax request
+        httpRequest.open('POST', url, true);
+        httpRequest.setRequestHeader('X-Content-Type-Options', 'nosniff');
+        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpRequest.setRequestHeader('X-CSRFToken', csrf_token);
+        httpRequest.responseType = "json";
+        httpRequest.send('article_body=' + encodeURIComponent(ckeditor.getData()));
+      } else {
+        alert(
+              'Article is too long. Maximum allowed length is ' + maxArticleLength +
+              ' characters. Your article has ' + articleLength + ' symbols.'
+             );
+      };
     } )
 });
