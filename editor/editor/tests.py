@@ -188,10 +188,9 @@ class UnitTests(TestCase):
         match = UnitTests.fullmatch_filename(img_name, ext)
         self.assertNotEqual(match, None, f'Result is: {img_name}')
 
-    def case_check_image(self, expected_result: str, img_name: str):
+    def case_check_image(self, img_name: str, expected_result: bool):
         path = UnitTests.path_to_test_img(img_name)
 
-        # print(dir())
         with patch(
             'editor.editor.tests.ImageProcess.generate_path',
             return_value=path
@@ -201,12 +200,6 @@ class UnitTests(TestCase):
             instance.generate_path.assert_called()
 
         self.assertEqual(expected_result, actual_result)
-
-    def case_image_not_exists(self, img_name: str):
-        img_path = UnitTests.path_to_test_img(img_name)
-        message = (f'Unable to open image: \'{img_path}\': '
-                   'No such file or directory')
-        self.case_check_image(message, img_name)
     
     # -----------------------------------------
     # TESTS
@@ -236,24 +229,27 @@ class UnitTests(TestCase):
         self.assertEqual(tested_path, ref_path)
 
     def test_check_image(self):
-        self.case_check_image('Image check completed', 'image.jpg')
-        self.case_check_image('Image check completed', 'image.png')
-        self.case_check_image('Image check completed', 'image.webp')
-        self.case_check_image('Image check completed', 'image.tiff')
-        self.case_check_image('Image check completed', 'image.gif')
+        # Upload valid images
+        self.case_check_image('image.jpg', True)
+        self.case_check_image('image.png', True)
+        self.case_check_image('image.webp', True)
+        self.case_check_image('image.tiff', True)
+        self.case_check_image('image.gif', True)
 
         # self.case_check_image(
         #     'File is too large. Maximum allowed size is 2.5Mb', 'large.jpg'
         # )
 
-        self.case_check_image('Unsupported mime type', 'html_page.jpg')
-        self.case_check_image('Unsupported mime type', 'malicious_js.png')
-        self.case_check_image('Unsupported mime type', 'icon.svg')
+        # Upload images with unsupported mime type
+        self.case_check_image('html_page.jpg', False)
+        self.case_check_image('malicious_js.png', False)
+        self.case_check_image('icon.svg', False)
 
-        self.case_image_not_exists('false_name.none')
-        self.case_image_not_exists('images.jpg')
-        self.case_image_not_exists('image.jpg1')
-        self.case_image_not_exists('image.jpg.jpg')
+        # Upload non-existing image files
+        self.case_check_image('false_name.none', False)
+        self.case_check_image('images.jpg', False)
+        self.case_check_image('image.jpg1', False)
+        self.case_check_image('image.jpg.jpg', False)
 
     def test_image_url(self):
         """Test image url generation."""

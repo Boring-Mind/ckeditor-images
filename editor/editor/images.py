@@ -22,7 +22,9 @@ class ImageUpload():
         if self.impr_instance.check_image():
             return ({'image': image}, filename)
         else:
-            raise ValidationError
+            raise ValidationError(
+                'Image has an invalid file type or is not exist'
+            )
 
     def save_image_to_db(self):
         image_data, image_name = self.get_image_data()
@@ -33,7 +35,7 @@ class ImageUpload():
             result_url = self.impr_instance.generate_img_url()
             return {'url': result_url}
         else:
-            raise ValidationError
+            raise ValidationError('Invalid data in the Image form')
 
     def process_images(self):
         try:

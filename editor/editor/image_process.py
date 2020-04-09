@@ -61,19 +61,18 @@ class ImageProcess:
             f'http://{domain}{settings.MEDIA_URL}uploads/{filename}'
         )
 
-    def check_image(self) -> str:
+    def check_image(self) -> bool:
         """Test image for the correct filetype."""
         image_path = ImageProcess.generate_path(self.filename)
         if not path.isfile(image_path):
             # logging.error(f'Unable to open image: \'{image_path}\': '
             #         'No such file or directory')
-            return (f'Unable to open image: \'{image_path}\': '
-                    'No such file or directory')
+            return False
 
         img_type = imghdr.what(image_path)
         if img_type in settings.SUPPORTED_IMG_FORMATS:
-            # logging.info('Image check completed')
-            return 'Image check completed'
-        
-        # logging.error('Unsupported mime type of image')
-        return 'Unsupported mime type'
+            # logging.error('Unsupported mime type of image')
+            return True
+
+        # logging.info('Image check completed')
+        return False
