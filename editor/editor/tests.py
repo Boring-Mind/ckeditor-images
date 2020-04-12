@@ -8,7 +8,7 @@ from unittest.mock import patch
 from django.conf import settings
 from django.test import TestCase
 
-from editor.editor.image_process import ImageProcess
+from editor.editor.image_process import ImageProcess, StatusMessages
 
 
 class TestHelperMethods():
@@ -83,7 +83,6 @@ class IntegrationTests(TestCase):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
-    @unittest.expectedFailure
     def test_failed_response_doesnt_contain_img_url(self):
         img_path = TestHelperMethods.get_test_image_path('html_page.jpg')
 
@@ -100,7 +99,6 @@ class IntegrationTests(TestCase):
 
         self.case_check_received_url(response_url)
 
-    @unittest.expectedFailure
     def test_return_correct_error_on_failed_image_upload(self):
         img_path = TestHelperMethods.get_test_image_path('icon.svg')
 
@@ -110,7 +108,7 @@ class IntegrationTests(TestCase):
 
         ref_error = (
             'Unsupported image type. '
-            'We can handle only jpg, png, gif, webp, tiff.'
+            'We can handle jpg, png, gif, webp, tiff.'
         )
         self.assertEqual(ref_error, error)
 
@@ -188,7 +186,7 @@ class UnitTests(TestCase):
         match = UnitTests.fullmatch_filename(img_name, ext)
         self.assertNotEqual(match, None, f'Result is: {img_name}')
 
-    def case_check_image(self, img_name: str, expected_result: bool):
+    def case_check_image(self, img_name: str, expected_result: str):
         path = UnitTests.path_to_test_img(img_name)
 
         with patch(
@@ -230,26 +228,26 @@ class UnitTests(TestCase):
 
     def test_check_image(self):
         # Upload valid images
-        self.case_check_image('image.jpg', True)
-        self.case_check_image('image.png', True)
-        self.case_check_image('image.webp', True)
-        self.case_check_image('image.tiff', True)
-        self.case_check_image('image.gif', True)
+        self.case_check_image('image.jpg', StatusMessages.OK)
+        self.case_check_image('image.png', StatusMessages.OK)
+        self.case_check_image('image.webp', StatusMessages.OK)
+        self.case_check_image('image.tiff', StatusMessages.OK)
+        self.case_check_image('image.gif', StatusMessages.OK)
 
         # self.case_check_image(
         #     'File is too large. Maximum allowed size is 2.5Mb', 'large.jpg'
         # )
 
         # Upload images with unsupported mime type
-        self.case_check_image('html_page.jpg', False)
-        self.case_check_image('malicious_js.png', False)
-        self.case_check_image('icon.svg', False)
+        self.case_check_image('html_page.jpg', StatusMessages.INVALID_FILETYPE)
+        self.case_check_image('malicious_js.png', StatusMessages.INVALID_FILETYPE)
+        self.case_check_image('icon.svg', StatusMessages.INVALID_FILETYPE)
 
         # Upload non-existing image files
-        self.case_check_image('false_name.none', False)
-        self.case_check_image('images.jpg', False)
-        self.case_check_image('image.jpg1', False)
-        self.case_check_image('image.jpg.jpg', False)
+        self.case_check_image('false_name.none', StatusMessages.FILE_NOT_FOUND)
+        self.case_check_image('images.jpg', StatusMessages.FILE_NOT_FOUND)
+        self.case_check_image('image.jpg1', StatusMessages.FILE_NOT_FOUND)
+        self.case_check_image('image.jpg.jpg', StatusMessages.FILE_NOT_FOUND)
 
     def test_image_url(self):
         """Test image url generation."""

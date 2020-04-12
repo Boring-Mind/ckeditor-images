@@ -1,10 +1,10 @@
 from typing import Sequence, Dict, Tuple
 
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse, HttpResponseServerError
+from django.http import JsonResponse
 
 from editor.editor.forms import ImageForm
-from editor.editor.image_process import ImageProcess
+from editor.editor.image_process import ImageProcess, StatusMessages
 
 
 class ImageUpload():
@@ -19,12 +19,7 @@ class ImageUpload():
         self.impr_instance = ImageProcess(filename)
         image.name = self.impr_instance.filename
 
-        if self.impr_instance.check_image():
-            return ({'image': image}, filename)
-        else:
-            raise ValidationError(
-                'Image has an invalid file type or is not exist'
-            )
+        return ({'image': image}, filename)
 
     def save_image_to_db(self):
         image_data, image_name = self.get_image_data()
@@ -32,14 +27,19 @@ class ImageUpload():
         form = ImageForm(self.request.POST, image_data)
         if form.is_valid():
             form.save()
-            result_url = self.impr_instance.generate_img_url()
-            return {'url': result_url}
-        else:
-            raise ValidationError('Invalid data in the Image form')
+
+            img_status = self.impr_instance.check_image()
+            if img_status == StatusMessages.OK:
+                result_url = self.impr_instance.generate_img_url()
+                return {'url': result_url}
+            else:
+                return {'error': {'message': img_status}}
+        
+        # Add function to cleanup form data from server
+        # self.impr_instance.remove_image()
+
+        raise ValidationError('Invalid data in the Image form')
 
     def process_images(self):
-        try:
-            response = self.save_image_to_db()
-            return JsonResponse(response)
-        except ValidationError:
-            return HttpResponseServerError()
+        response = self.save_image_to_db()
+        return JsonResponse(response)

@@ -7,11 +7,20 @@ from django.conf import settings
 from editor.webutils.urlutils import URLUtils
 
 
+class StatusMessages():
+    OK = ''
+    FILE_NOT_FOUND = 'File is already deleted or was not existed.'
+    INVALID_FILETYPE = 'Unsupported image type. We can handle jpg, png, gif, webp, tiff.'
+    IMAGE_TOO_LARGE = 'Image is too big (max 1.5MB).'
+
+
 class ImageProcess:
     def __init__(self, filename: str):
         self.__filename = ''
         self.filename = self.get_unique_filename(filename)
 
+    # Filename property
+    ###################################################
     def _get_filename(self):
         return self.__filename
 
@@ -23,6 +32,7 @@ class ImageProcess:
             return False
 
     filename = property(_get_filename, _set_filename)
+    ###################################################
 
     @classmethod
     def generate_name(cls, filename: str) -> str:
@@ -45,13 +55,17 @@ class ImageProcess:
     def get_unique_filename(self, filename: str) -> str:
         """Check generated filename for uniqueness."""
         new_name = ImageProcess.generate_name(filename)
-        new_path = ImageProcess.generate_path(filename)
+        new_path = ImageProcess.generate_path(new_name)
 
         if path.exists(new_path):
             new_path = ImageProcess.generate_path(new_name)
 
         self.filename = new_name
         return new_name
+
+    # ToDo: remove image file after the unsuccessful check
+    def remove_image(self):
+        pass
 
     def generate_img_url(self) -> str:
         """Generate relative url link to the new image."""
@@ -61,18 +75,18 @@ class ImageProcess:
             f'http://{domain}{settings.MEDIA_URL}uploads/{filename}'
         )
 
-    def check_image(self) -> bool:
+    def check_image(self) -> str:
         """Test image for the correct filetype."""
         image_path = ImageProcess.generate_path(self.filename)
         if not path.isfile(image_path):
             # logging.error(f'Unable to open image: \'{image_path}\': '
             #         'No such file or directory')
-            return False
+            return StatusMessages.FILE_NOT_FOUND
 
         img_type = imghdr.what(image_path)
         if img_type in settings.SUPPORTED_IMG_FORMATS:
             # logging.error('Unsupported mime type of image')
-            return True
+            return StatusMessages.OK
 
         # logging.info('Image check completed')
-        return False
+        return StatusMessages.INVALID_FILETYPE
