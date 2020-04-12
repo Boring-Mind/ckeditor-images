@@ -14,5 +14,7 @@ The app is an example of blog, which supports adding articles with images and em
 3. Detail view of the article
 
 ## Requirements
-Python 3.6
+* Python 3.6 - needed for f-string syntax
+
+
 Another requirements are listed in requirements.txt
