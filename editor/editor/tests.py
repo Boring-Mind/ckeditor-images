@@ -83,11 +83,8 @@ class IntegrationTests(TestCase):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
-    def test_failed_response_doesnt_contain_img_url(self):
-        img_path = TestHelperMethods.get_test_image_path('html_page.jpg')
-
-        with open(img_path, 'rb') as image:
-            response = self.post_image(image)
+    def test_failed_response_does_not_contain_img_url(self):
+        response = self.open_image_and_post_it('html_page.jpg')
             
         # There cannot be an urls in a failed request
         self.assertTrue('url' not in response)
@@ -100,10 +97,7 @@ class IntegrationTests(TestCase):
         self.case_check_received_url(response_url)
 
     def test_return_correct_error_on_failed_image_upload(self):
-        img_path = TestHelperMethods.get_test_image_path('icon.svg')
-
-        with open(img_path, 'rb') as image:
-            response = self.post_image(image)
+        response = self.open_image_and_post_it('icon.svg')
         error = self.get_error_from_response(response)
 
         ref_error = (
