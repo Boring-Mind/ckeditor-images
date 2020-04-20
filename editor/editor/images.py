@@ -41,7 +41,7 @@ class ImageUpload():
         
         # Add function to cleanup form data from server
         # self.impr_instance.remove_image()
-
+        
         raise ValidationError('Invalid data in the Image form')
 
     def process_images(self):
