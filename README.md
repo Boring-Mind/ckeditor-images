@@ -11,9 +11,7 @@ The app is an example of blog, which supports adding articles with images and em
 1. Storing image paths in the article model in order to delete images with article
 2. Blog page with articles list
 3. Detail view of the article
-4. Image delete after the test
-5. Image delete after the unsuccessful check
-6. Check image size before the upload starts (HEAD request)
+4. Check image size before the upload starts (HEAD request)
 
 ## Requirements
 * Python 3.6 - needed for f-string syntax
