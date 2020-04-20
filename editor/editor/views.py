@@ -2,9 +2,15 @@ from random import randrange
 
 from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
+from django.conf import settings
 
 from editor.editor.models import Article
 from editor.editor.images import ImageUpload
+
+
+def payload_too_large() -> dict:
+    """Return HttpResponse with status code 413."""
+    return HttpResponse(status=413)
 
 
 def editor_view(request):
@@ -28,14 +34,18 @@ def process_article(request):
 
 
 def process_images(request):
-    return ImageUpload(request).process_images()
+    content_length = int(request.headers.get('Content-Length'))
+    if content_length < settings.MAXIMUM_UPLOAD_SIZE:
+        return ImageUpload(request).process_images()
+    else:
+        return payload_too_large()
 
 
 def upload_view(request) -> HttpResponse:
     if request.method == 'POST':
-        if request.headers['content_type'] == 'application/x-www-form-urlencoded':
+        if request.headers.get('content_type') == 'application/x-www-form-urlencoded':
             return process_article(request)
-        elif 'multipart/form-data' in request.headers['content_type']:
+        elif 'multipart/form-data' in request.headers.get('content_type'):
             return process_images(request)
     else:
         return HttpResponseNotFound()

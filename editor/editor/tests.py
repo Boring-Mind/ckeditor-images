@@ -1,8 +1,7 @@
 import os
 import json
 import re
-from typing import BinaryIO
-import unittest
+from io import BytesIO
 from unittest.mock import patch
 
 from django.conf import settings
@@ -30,7 +29,7 @@ class IntegrationTests(TestCase):
     # Post images
     # -----------------------------------------
 
-    def post_image(self, image: BinaryIO) -> dict:
+    def post_image(self, image: BytesIO) -> dict:
         response = self.client.post('/upload/', {
             'upload': image
         })
@@ -71,6 +70,17 @@ class IntegrationTests(TestCase):
             os.remove(path)
 
     # -----------------------------------------
+    # Generate random data
+    # -----------------------------------------
+
+    def get_long_byte_string(self, length: str) -> BytesIO:
+        """Generate random string of bytes with given length.
+
+        length cannot be larger than 1000 and lower than zero.
+        """
+        return os.urandom(length)
+
+    # -----------------------------------------
     # CASES
     # 
     # Description:
@@ -91,6 +101,16 @@ class IntegrationTests(TestCase):
             "Image url received from the response is not correct.\n"
             f"Received url: {response_url}"
         )
+
+    def case_send_post_request_with_length(self, length: int) -> dict:
+        """Send POST request with given length.
+
+        Length cannot be more than 1000 or smaller than zero.
+        """
+        data = self.get_long_byte_string(length)
+        return self.client.post('/upload/', {
+            'upload': BytesIO(data)
+        })
 
     # -----------------------------------------
     # TESTS
@@ -158,6 +178,22 @@ class IntegrationTests(TestCase):
         self.assertTrue(file_exists)
 
         self.file_cleanup(response)
+
+    def test_long_requests_are_refused(self):
+        """Requests, larger than the maximum upload size are accepted."""
+        length = settings.MAXIMUM_UPLOAD_SIZE
+        
+        response = self.case_send_post_request_with_length(length)
+
+        self.assertEqual(response.status_code, 413)
+
+    def test_small_requests_are_accepted(self):
+        """Requests, smaller than the maximum upload size are accepted."""
+        length = settings.MAXIMUM_UPLOAD_SIZE - 1024
+        
+        response = self.case_send_post_request_with_length(length)
+
+        self.assertNotEqual(response.status_code, 413)
 
 
 class UnitTests(TestCase):

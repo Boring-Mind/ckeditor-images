@@ -140,3 +140,6 @@ UPLOAD_ROOT = os.path.join(MEDIA_ROOT, 'uploads')
 
 # image formats, that are supported to upload to server
 SUPPORTED_IMG_FORMATS = ['png', 'jpeg', 'tiff', 'webp', 'gif']
+
+# maximum upload size in bytes
+MAXIMUM_UPLOAD_SIZE = int(2.5 * 1024 * 1024)

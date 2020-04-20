@@ -79,13 +79,16 @@ $(document).ready(function(){
       let articleLength = getArticleLength();
       if (articleLength <= maxArticleLength) {
 
+        let data = encodeURIComponent(ckeditor.getData());
+
         // Setting and sending ajax request
         httpRequest.open('POST', url, true);
         httpRequest.setRequestHeader('X-Content-Type-Options', 'nosniff');
         httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpRequest.setRequestHeader('Content-Length', data.length);
         httpRequest.setRequestHeader('X-CSRFToken', csrf_token);
         httpRequest.responseType = "json";
-        httpRequest.send('article_body=' + encodeURIComponent(ckeditor.getData()));
+        httpRequest.send('article_body=' + data);
       } else {
         alert(
               'Article is too long. Maximum allowed length is ' + maxArticleLength +
