@@ -1,5 +1,5 @@
 import imghdr
-from os import path
+import os
 
 import nanoid
 from django.conf import settings
@@ -40,7 +40,7 @@ class ImageProcess:
 
         Resulted filename looks like that: nMcsadvknv.jpg
         """
-        extension = path.splitext(filename)[1]
+        extension = os.path.splitext(filename)[1]
         if extension == '':
             extension = filename
         new_name = nanoid.generate(size=15)
@@ -50,22 +50,26 @@ class ImageProcess:
     @classmethod
     def generate_path(cls, filename: str) -> str:
         """Generate absolute path to new image."""
-        return path.join(settings.UPLOAD_ROOT, filename)
+        return os.path.join(settings.UPLOAD_ROOT, filename)
 
     def get_unique_filename(self, filename: str) -> str:
         """Check generated filename for uniqueness."""
         new_name = ImageProcess.generate_name(filename)
         new_path = ImageProcess.generate_path(new_name)
 
-        if path.exists(new_path):
+        if os.path.exists(new_path):
             new_path = ImageProcess.generate_path(new_name)
 
         self.filename = new_name
         return new_name
 
-    # ToDo: remove image file after the unsuccessful check
-    def remove_image(self):
-        pass
+    def remove_image(self) -> bool:
+        """Remove image file after unsuccessful check."""
+        try:
+            os.remove(self.generate_path(self.filename))
+            return True
+        except OSError:
+            return False
 
     def generate_img_url(self) -> str:
         """Generate relative url link to the new image."""
@@ -78,9 +82,10 @@ class ImageProcess:
     def check_image(self) -> str:
         """Test image for the correct filetype."""
         image_path = ImageProcess.generate_path(self.filename)
-        if not path.isfile(image_path):
+        if not os.path.isfile(image_path):
             # logging.error(f'Unable to open image: \'{image_path}\': '
             #         'No such file or directory')
+            self.remove_image()
             return StatusMessages.FILE_NOT_FOUND
 
         img_type = imghdr.what(image_path)
@@ -89,4 +94,5 @@ class ImageProcess:
             return StatusMessages.OK
 
         # logging.info('Image check completed')
+        self.remove_image()
         return StatusMessages.INVALID_FILETYPE
