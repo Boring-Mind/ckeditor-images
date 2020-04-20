@@ -20,7 +20,7 @@ class ImageUpload():
         self.impr_instance = ImageProcess(filename)
         image.name = self.impr_instance.filename
 
-        return ({'image': image}, filename)
+        return {'image': image}
 
     def get_response(self):
         """Check image and get corresponding response."""
@@ -32,7 +32,7 @@ class ImageUpload():
             return JsonResponse({'error': {'message': img_status}}, status=415)
 
     def save_image_to_db(self):
-        image_data, image_name = self.get_image_data()
+        image_data = self.get_image_data()
 
         form = ImageForm(self.request.POST, image_data)
         if form.is_valid():
