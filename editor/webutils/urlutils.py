@@ -10,7 +10,7 @@ class URLUtils:
 
         If url will be as follows:
         'https://example.com/some/path/to/file.jpg'
-        Function returns:
+        Function result will be:
         'file.jpg'
         """
         return url.split('/')[-1]
