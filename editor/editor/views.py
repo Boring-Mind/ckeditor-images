@@ -1,16 +1,12 @@
 from random import randrange
 
+from django.conf import settings
 from django.http import JsonResponse, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
-from django.conf import settings
 
-from editor.editor.models import Article
 from editor.editor.images import ImageUpload
-
-
-def payload_too_large() -> dict:
-    """Return HttpResponse with status code 413."""
-    return HttpResponse(status=413)
+from editor.editor.models import Article
+from editor.webutils.responses import HttpResponseCodes
 
 
 def editor_view(request):
@@ -38,7 +34,7 @@ def process_images(request):
     if content_length < settings.MAXIMUM_UPLOAD_SIZE:
         return ImageUpload(request).process_images()
     else:
-        return payload_too_large()
+        return HttpResponseCodes.payload_too_large()
 
 
 def upload_view(request) -> HttpResponse:

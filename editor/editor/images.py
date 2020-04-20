@@ -13,6 +13,7 @@ class ImageUpload():
         self.impr_instance = None
 
     def get_image_data(self) -> Sequence[Tuple[Dict, str]]:
+        """Parse image data from request."""
         image = self.request.FILES['upload']
         filename = self.request.FILES['upload'].name
 
