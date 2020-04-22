@@ -5,6 +5,6 @@ before_install:
   - "pip install -U pip"
 install:
   - "pip install -r requirements.txt"
-script: "codecov run manage.py test"
+script: "coverage run manage.py test"
 after_success:
   - codecov
