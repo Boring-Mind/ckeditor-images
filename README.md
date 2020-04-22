@@ -1,6 +1,7 @@
 # ckeditor-images
 
 [![codecov](https://codecov.io/gh/Boring-Mind/ckeditor-images/branch/master/graph/badge.svg)](https://codecov.io/gh/Boring-Mind/ckeditor-images)
+[![Build Status](https://travis-ci.com/Boring-Mind/ckeditor-images.svg?branch=master)](https://travis-ci.com/Boring-Mind/ckeditor-images)
 
 The app is an example of blog, which supports adding articles with images and embedded videos via the CKEditor5 - WYSIWYG editor.
 
