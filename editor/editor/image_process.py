@@ -24,12 +24,8 @@ class ImageProcess:
     def _get_filename(self):
         return self.__filename
 
-    def _set_filename(self, filename: str) -> bool:
-        try:
-            self.__filename = filename
-            return True
-        except Exception:
-            return False
+    def _set_filename(self, filename: str):
+        self.__filename = filename
 
     filename = property(_get_filename, _set_filename)
     ###################################################
