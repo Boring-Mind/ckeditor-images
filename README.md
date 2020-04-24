@@ -17,6 +17,13 @@ The app is an example of blog, which supports adding articles with images and em
 2. Blog page with articles list
 3. Detail view of the article
 
+## Used technologies:
+#### CI (GitHub Actions):
+1. [Snyk](https://snyk.io/) - vulnerability fixer (helps to keep dependencies up-to-date)
+2. [PyCharm Python Security Scanner](https://github.com/marketplace/actions/pycharm-python-security-scanner) - Python and Django security checks
+3. [Codecov](https://codecov.io/) - Code coverage measurement
+4. [Code Inspector](https://github.com/marketplace/code-inspector) - Automated code reviews
+
 ## Requirements
 * Python 3.6 - needed for f-string syntax
 
