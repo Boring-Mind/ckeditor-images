@@ -2,7 +2,7 @@
 
 ![master](https://github.com/Boring-Mind/ckeditor-images/workflows/master/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/Boring-Mind/ckeditor-images/branch/master/graph/badge.svg)](https://codecov.io/gh/Boring-Mind/ckeditor-images)
-![Code Quality Score](https://www.code-inspector.com/project/6845/status/svg)
+[![Code Quality Score](https://www.code-inspector.com/project/6845/status/svg)](https://www.code-inspector.com/)
 
 
 The app is an example of blog, which supports adding articles with images and embedded videos via the CKEditor5 - WYSIWYG editor.
