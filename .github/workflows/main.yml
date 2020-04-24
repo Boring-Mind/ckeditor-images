@@ -25,7 +25,7 @@ jobs:
         python -m coverage run manage.py test
     - name: Create coverage report
       run: |
-        python -m coverage xml
+        python -m coverage xml -o coverage.xml
     - name: Upload coverage report to Codecov
       uses: codecov/codecov-action@v1
       with:
