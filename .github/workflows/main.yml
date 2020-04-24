@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@master
@@ -23,12 +23,6 @@ jobs:
     - name: Run tests
       run: |
         python -m coverage run manage.py test
-    - name: Create coverage report
+    - name: Send coverage report
       run: |
-        python -m coverage xml -o coverage.xml
-    - name: Upload coverage report to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
-        name: codecov-umbrella
-        fail_ci_if_error: true
+        bash <(curl -s https://codecov.io/bash)
