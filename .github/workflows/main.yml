@@ -3,12 +3,8 @@ name: master
 on: [push, pull_request]
 
 jobs:
-  run:
-
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+  coverage:
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
@@ -20,9 +16,14 @@ jobs:
       run: |
         python -m pip install -U pip
         pip install -r requirements.txt
-    - name: Run tests
-      run: |
-        python -m coverage run manage.py test
-    - name: Send coverage report
+    - name: Run coverage test
       run: |
         bash <(curl -s https://codecov.io/bash)
+
+  security-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: PyCharm Python Security Scanner
+      uses: tonybaloney/pycharm-security@1.16.0
