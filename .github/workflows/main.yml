@@ -1,4 +1,4 @@
-name: Main workflow for master branch
+name: master
 
 on: [push, pull_request]
 
