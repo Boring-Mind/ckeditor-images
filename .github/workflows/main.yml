@@ -22,5 +22,11 @@ jobs:
         pip install -r requirements.txt
     - name: Send coverage report
       run: |
-        coverage run manage.py test
-        bash <(curl -s https://codecov.io/bash)
+        python -m coverage run manage.py test
+        python -m coverage xml
+    - name: Upload coverage report to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        name: codecov-umbrella
+        fail_ci_if_error: true
