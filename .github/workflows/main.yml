@@ -14,8 +14,8 @@ jobs:
         python-version: 3.6
     - name: Install dependencies
       run: |
-        "pip install -U pip"
-        "pip install -r ./requirements.txt"
+        # "pip install -U pip"
+        "pip install -r requirements.txt"
     - name: Generate coverage report
       run: |
         "coverage run manage.py test"
