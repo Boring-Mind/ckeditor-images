@@ -20,9 +20,11 @@ jobs:
       run: |
         python -m pip install -U pip
         pip install -r requirements.txt
-    - name: Send coverage report
+    - name: Run tests
       run: |
         python -m coverage run manage.py test
+    - name: Create coverage report
+      run: |
         python -m coverage xml
     - name: Upload coverage report to Codecov
       uses: codecov/codecov-action@v1
