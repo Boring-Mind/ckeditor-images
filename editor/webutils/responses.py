@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 
 
-class HttpResponseCodes():
+class HttpResponseCodes:
+    """Holds shortcuts for different http responses."""
+    
     @classmethod
     def payload_too_large(cls) -> dict:
         """Return HttpResponse with status code 413."""
