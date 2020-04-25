@@ -2,10 +2,12 @@ from django.contrib.sites.models import Site
 
 
 class URLUtils:
-    def get_current_domain():
+    @classmethod
+    def get_current_domain(cls):
         return Site.objects.get_current().domain
 
-    def get_filename_from_url(url: str):
+    @classmethod
+    def get_filename_from_url(cls, url: str):
         """Return last word from the url.
 
         If url will be as follows:
