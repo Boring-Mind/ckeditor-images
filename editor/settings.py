@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'editor.editor',
     'django.contrib.sites',
-    'editor.webutils',
+    'editor.blog',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +129,8 @@ SITE_ID = 1
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'editor', 'blog', 'static')
 ]
 
 MEDIA_URL = '/media/'
