@@ -60,38 +60,23 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
               <div class="dropdown-menu" aria-labelledby="dropdown1">
-                <a class="dropdown-item" href="home-masonry.html">Masonry</a>
-                <a class="dropdown-item" href="home-featured-post.html">Featured post</a>
-                <a class="dropdown-item" href="home-sidebar.html">Sidebar</a>
-                <a class="dropdown-item" href="home-full-width.html">Full width</a>
+                <a class="dropdown-item" href="{% url 'blog-home' %}">Masonry</a>
               </div>
             </li>
 
             <li class="dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Posts</a>
               <div class="dropdown-menu" aria-labelledby="dropdown2">
-                <a class="dropdown-item" href="post-image.html">Post + Image</a>
-                <a class="dropdown-item" href="post-video.html">Post + Video</a>
+                <a class="dropdown-item" href="{% url 'blog-post' %}">Post + Image</a>
               </div>
             </li>
 
             <li class="dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
               <div class="dropdown-menu" aria-labelledby="dropdown3">
-                <a class="dropdown-item" href="page-about.html">About</a>
-                <a class="dropdown-item" href="page-contact.html">Contact</a>
-                <a class="dropdown-item" href="page-404.html">404</a>
-              </div>
-            </li>
-
-            <li class="dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Elements</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown4">
-                <a class="dropdown-item" href="doc-typography.html">Typography</a>
-                <a class="dropdown-item" href="doc-buttons.html">Buttons</a>
-                <a class="dropdown-item" href="doc-tables.html">Tables</a>
-                <a class="dropdown-item" href="doc-forms.html">Forms</a>
-                <a class="dropdown-item" href="doc-cards.html">Cards</a>
+                <a class="dropdown-item" href="{% url 'blog-about' %}">About</a>
+                <a class="dropdown-item" href="{% url 'blog-contact' %}">Contact</a>
+                <a class="dropdown-item" href="{% url 'blog-404' %}">404</a>
               </div>
             </li>
           </ul>
@@ -129,9 +114,9 @@
             </div>
             <div class="col-sm-8">
               <ul class="list-inline">
-                <li class="list-inline-item"><a href="home-masonry.html">Home</a></li>
-                <li class="list-inline-item"><a href="page-about.html">About</a></li>
-                <li class="list-inline-item"><a href="page-contact.html">Contact</a></li>
+                <li class="list-inline-item"><a href="{% url 'blog-home' %}">Home</a></li>
+                <li class="list-inline-item"><a href="{% url 'blog-about' %}">About</a></li>
+                <li class="list-inline-item"><a href="{% url 'blog-contact' %}">Contact</a></li>
               </ul>
             </div>
             <div class="col-md-2">
