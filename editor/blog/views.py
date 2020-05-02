@@ -18,4 +18,4 @@ def about_view(request):
 
 
 def post_view(request):
-    return render(request, 'post-image.html')
+    return render(request, 'post-detail.html')

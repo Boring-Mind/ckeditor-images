@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+    <div id="single">
+      <div class="container">
+        <div class="post">
+          <img src="media/uploads/DeathtoStockSerenity8.jpg" class="img-fluid" />
+
+          <div class="caption">
+            <div class="header">
+              <span class="post-tag">#music</span>
+              <h1>I'm only breathing</h1>
+            </div>
+
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque <a href="#">penatibus</a> et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, <strong>pretium quis, sem.</strong></p>
+
+            <p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+
+            <p><strong>Aliquam lorem ante</strong>, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. <strong>Etiam rhoncus</strong>. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante <a href="#">tincidunt tempus</a>.</p>
+
+            <blockquote>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+            </blockquote>
+
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, <a href="#">nascetur ridiculus</a> mus. Donec quam felis, ultricies nec, pellentesque eu, <strong>pretium quis, sem.</strong></p>
+
+            <div class="row">
+              <div class="col-md-4">
+                <ul>
+                  <li>Donec quam felis</li>
+                  <li>Consectetuer adipiscing</li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <ul>
+                  <li>Donec quam felis</li>
+                  <li>Consectetuer adipiscing</li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <ul>
+                  <li>Donec quam felis</li>
+                  <li>Consectetuer adipiscing</li>
+                </ul>
+              </div>
+            </div>
+
+            <p>Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. <strong>Etiam rhoncus</strong>. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante <a href="#">tincidunt tempus</a>.</p>
+
+          </div>
+        </div>
+
+        <div class="related">
+          <div class="text-center">
+            <h3>You may also like</h3>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <a href="#">
+                <img src="media/uploads/DeathtoStock_EnergyandSerenity7.jpg" class="img-fluid" />
+                <h4>Don't look at me</h4>
+                <span class="post-tag">#lifestype</span>
+              </a>
+            </div>
+            <div class="col-md-4">
+              <a href="#">
+                <img src="media/uploads/DeathtoStock_EnergyandSerenity6.jpg" class="img-fluid" />
+                <h4>You're sharp alright</h4>
+                <span class="post-tag">#music</span>
+              </a>
+            </div>
+            <div class="col-md-4">
+              <a href="#">
+                <img src="media/uploads/DeathtoStock_EnergyandSerenity5.jpg" class="img-fluid" />
+                <h4>Loose lips</h4>
+                <span class="post-tag">#travel</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="comments">
+
+          <!-- START DISQUS -->
+          <div id="disqus_thread"></div>
+          <script type="text/javascript">
+              /* * * CONFIGURATION VARIABLES * * */
+              var disqus_shortname = 'adabootstrap';
+
+              /* * * DISQUS START SCRIPT * * */
+              (function() {
+                  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+              })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+          <!-- END DISQUS -->
+        </div>
+      </div>
+    </div>
+    {% endblock content %}
