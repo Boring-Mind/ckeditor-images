@@ -43,5 +43,5 @@ def upload_view(request) -> HttpResponse:
             return process_article(request)
         elif 'multipart/form-data' in request.headers.get('content_type'):
             return process_images(request)
-    else:
-        return HttpResponseNotFound()
+        return HttpResponseCodes.unsupported_content_type()
+    return HttpResponseNotFound()

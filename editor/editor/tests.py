@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.test import TestCase
+from django.utils.http import urlencode
 
 from editor.editor.image_process import ImageProcess, StatusMessages
 from editor.webutils.urlutils import URLUtils
@@ -80,6 +81,11 @@ class IntegrationTests(TestCase):
         """
         return os.urandom(length)
 
+    def get_fake_uploading_img(self, length: int) -> dict:
+        """Generate fake POST request payload for /upload/ page."""
+        data = self.get_long_byte_string(length)
+        return {'upload': BytesIO(data)}
+
     # -----------------------------------------
     # CASES
     # 
@@ -107,10 +113,9 @@ class IntegrationTests(TestCase):
 
         Length cannot be more than 1000 or smaller than zero.
         """
-        data = self.get_long_byte_string(length)
-        return self.client.post('/upload/', {
-            'upload': BytesIO(data)
-        })
+        return self.client.post(
+            '/upload/', self.get_fake_uploading_img(length)
+        )
 
     # -----------------------------------------
     # TESTS
@@ -118,6 +123,27 @@ class IntegrationTests(TestCase):
     def test_return_404_on_get_request(self):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
+
+    def test_return_200_on_multipart_content_type_upload(self):
+        """Hint: content type in POST request is MULTIPART by default."""
+        response = self.open_image_and_post_it('image.jpg')
+        
+        # If url is returned, then request is successful
+        self.assertIn('url', response)
+        
+        self.file_cleanup(response)
+
+    def test_return_200_on_www_content_type_upload(self):
+        response = self.client.post(
+            '/upload/',
+            data=urlencode({'article_body': 's'}),
+            content_type='application/x-www-form-urlencoded',
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_return_415_on_invalid_content_type_upload(self):
+        response = self.client.post('/upload/', content_type='wrong-type')
+        self.assertEqual(response.status_code, 415)
 
     def test_failed_response_does_not_contain_img_url(self):
         response = self.open_image_and_post_it('html_page.jpg')
