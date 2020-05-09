@@ -149,8 +149,8 @@ class IntegrationTests(TestCase):
         response = self.open_image_and_post_it('html_page.jpg')
             
         # There cannot be an urls in a failed request
-        self.assertTrue('url' not in response)
-        self.assertTrue('urls' not in response)
+        self.assertNotIn('url', response)
+        self.assertNotIn('urls', response)
 
     def test_return_filenames_on_success_image_upload(self):
         response = self.open_image_and_post_it('image.jpg')
@@ -173,7 +173,7 @@ class IntegrationTests(TestCase):
     def test_success_response_doesnt_contain_err_message(self):
         response = self.open_image_and_post_it('image.jpg')
         # There cannot be an error message in a successful request
-        self.assertTrue('error' not in response)
+        self.assertNotIn('error', response)
 
         self.file_cleanup(response)
 

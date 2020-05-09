@@ -25,7 +25,8 @@ def process_article(request):
     json_response['body'] = article_body
     json_response['world'] = 'Hello World!'
     return JsonResponse(
-        json_response, content_type='application/json'
+        json_response,
+        content_type='application/json'
     )
 
 
