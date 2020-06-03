@@ -1,4 +1,4 @@
-django==3.0.5
+django==3.0.7
 nanoid==2.0.0
 wand==0.5.9
 coverage==5.1
