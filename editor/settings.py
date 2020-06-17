@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'editor.editor',
     'django.contrib.sites',
     'editor.blog',
-    'crispy_forms'
+    'crispy_forms',
+    'editor.templatetags',
 ]
 
 MIDDLEWARE = [

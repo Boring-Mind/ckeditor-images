@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load media %}
     {% block content %}
     <div id="single">
       <div class="container">
         <div class="post">
-          <img src="media/uploads/DeathtoStockSerenity8.jpg" class="img-fluid" />
+          <img src="{% media 'uploads/DeathtoStockSerenity8.jpg' 'absolute' %}" class="img-fluid" />
 
           <div class="caption">
             <div class="header">
@@ -57,21 +57,21 @@
           <div class="row">
             <div class="col-md-4">
               <a href="#">
-                <img src="media/uploads/DeathtoStock_EnergyandSerenity7.jpg" class="img-fluid" />
+                <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity7.jpg' %}" class="img-fluid" />
                 <h4>Don't look at me</h4>
                 <span class="post-tag">#lifestype</span>
               </a>
             </div>
             <div class="col-md-4">
               <a href="#">
-                <img src="media/uploads/DeathtoStock_EnergyandSerenity6.jpg" class="img-fluid" />
+                <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity6.jpg' %}" class="img-fluid" />
                 <h4>You're sharp alright</h4>
                 <span class="post-tag">#music</span>
               </a>
             </div>
             <div class="col-md-4">
               <a href="#">
-                <img src="media/uploads/DeathtoStock_EnergyandSerenity5.jpg" class="img-fluid" />
+                <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity5.jpg' %}" class="img-fluid" />
                 <h4>Loose lips</h4>
                 <span class="post-tag">#travel</span>
               </a>
@@ -85,7 +85,7 @@
           <div id="disqus_thread"></div>
           <script type="text/javascript">
               /* * * CONFIGURATION VARIABLES * * */
-              var disqus_shortname = 'adabootstrap';
+              var disqus_shortname = 'adablog';
 
               /* * * DISQUS START SCRIPT * * */
               (function() {
