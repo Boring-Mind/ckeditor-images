@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'editor.editor',
     'django.contrib.sites',
     'editor.blog',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -57,9 +58,7 @@ ROOT_URLCONF = 'editor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            'templates',
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,6 +84,10 @@ DATABASES = {
     }
 }
 
+# User model
+
+MIN_PASSWORD_LENGTH = 9
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -95,6 +98,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': MIN_PASSWORD_LENGTH,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -128,10 +134,7 @@ SITE_ID = 1
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'editor', 'blog', 'static')
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 
@@ -144,3 +147,19 @@ SUPPORTED_IMG_FORMATS = ['png', 'jpeg', 'tiff', 'webp', 'gif']
 
 # maximum upload size in bytes
 MAXIMUM_UPLOAD_SIZE = int(2.5 * 1024 * 1024)
+
+# Authentication urls
+
+LOGIN_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'home'
+
+LOGOUT_REDIRECT_URL = 'home'
+
+# Crispy forms
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Post creation
+
+MAX_POST_LENGTH = 15000
