@@ -174,6 +174,19 @@ class IntegrationTests(TestCase):
         )
         self.assertEqual(ref_error, error)
 
+    def test_return_error_on_empty_file_field(self):
+        """Test form_invalid branch in save_image_to_db."""
+        ref_error = 'Failed to load image file'
+
+        # Sending empty response causes ImageForm validation fail
+        response = self.client.post(
+            '/upload/', self.get_fake_uploading_img(0)
+        )
+        error = self.get_error_from_response(json.loads(response.content))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(error, ref_error)
+
     def test_success_response_doesnt_contain_err_message(self):
         response = self.open_image_and_post_it('image.jpg')
         # There cannot be an error message in a successful request
@@ -209,7 +222,7 @@ class IntegrationTests(TestCase):
 
         self.file_cleanup(response)
 
-    def test_long_requests_are_refused(self):
+    def test_large_requests_are_refused(self):
         """Requests, larger than the maximum upload size are accepted."""
         length = settings.MAXIMUM_UPLOAD_SIZE
         

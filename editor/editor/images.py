@@ -42,7 +42,9 @@ class ImageUpload():
         # Add function to cleanup form data from server
         # self.impr_instance.remove_image()
         
-        raise ValidationError('Invalid data in the Image form')
+        return JsonResponse(
+            {'error': {'message': 'Failed to load image file'}}, status=400
+        )
 
     def process_images(self):
         return self.save_image_to_db()
