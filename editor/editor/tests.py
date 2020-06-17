@@ -175,7 +175,7 @@ class IntegrationTests(TestCase):
         self.assertEqual(ref_error, error)
 
     def test_return_error_on_empty_file_field(self):
-        """Test form_invalid branch in save_image_to_db."""
+        """Test form_invalid branch in images::process_images."""
         ref_error = 'Failed to load image file'
 
         # Sending empty response causes ImageForm validation fail
