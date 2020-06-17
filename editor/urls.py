@@ -25,4 +25,5 @@ urlpatterns = [
     path('', views.editor_view, name="editor"),
     path('upload/', views.upload_view, name="upload"),
     path('blog/', include('editor.blog.urls')),
+    path('blog/admin/', include('editor.blog_admin.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,8 @@
 var hashtags_input = document.querySelector("input#hashtags_input")
+
+// var buttons = document.querySelector(".btn")
+// buttons.classList.remove("btn");
+
 tagify = new Tagify(hashtags_input, {
     maxTags: 5,
     placeholder: "E.g. 'Machine Learning' or 'CI/CD'",
@@ -6,7 +10,7 @@ tagify = new Tagify(hashtags_input, {
 });
 
 async function getTags() {
-    const url = 'http://127.0.0.1:8000/tags/get/'
+    const url = 'http://127.0.0.1:8000/blog/admin/tags/get/'
     const response = await fetch(url, {
         method: 'GET',
         headers: {

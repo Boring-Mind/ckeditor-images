@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'editor.blog',
     'crispy_forms',
     'editor.templatetags',
+    'editor.blog_admin',
 ]
 
 MIDDLEWARE = [
@@ -153,9 +154,9 @@ MAXIMUM_UPLOAD_SIZE = int(2.5 * 1024 * 1024)
 
 LOGIN_URL = 'login'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'blog_admin:home'
 
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'blog_admin:home'
 
 # Crispy forms
 

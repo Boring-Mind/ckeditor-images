@@ -117,7 +117,7 @@ ul {
   list-style-type: square;
 }
 
-.btn {
+.ada-btn {
   -webkit-transition: none;
   transition: none;
 }
@@ -163,7 +163,7 @@ ul {
 /***********************************************
 * Buttons
 ***********************************************/
-.btn {
+.ada-btn {
   border-radius: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -788,7 +788,7 @@ fieldset[disabled] .navbar-ada .btn-link:focus {
   color: #FF7C26;
 }
 
-#styles .style a.btn {
+#styles .style a.ada-btn {
   color: #FFF;
 }
 

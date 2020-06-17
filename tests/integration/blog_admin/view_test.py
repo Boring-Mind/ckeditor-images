@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from src.blog_admin.models import Post as PostModel
+from editor.blog_admin.models import Post as PostModel
 
 
 # Register view
@@ -50,7 +50,7 @@ def test_post_form_view_form_valid(client, django_user_model):
         'post_status': 'DR'
     }
 
-    response = client.post(reverse('create_post'), data)
+    response = client.post(reverse('blog_admin:create_post'), data)
 
     post = PostModel.objects.filter(
         title=data['title'], content=data['content']

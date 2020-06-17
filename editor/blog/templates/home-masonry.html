@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load media %}
     {% block content %}
     <div id="posts" class="container">
       <div class="row">
@@ -7,7 +8,7 @@
           <div class="post">
             <div class="row">
               <div class="col-md-6 media">
-                <img src="media/uploads/DeathtoStock_EnergyandSerenity31.jpg" class="img-fluid" />
+                <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity31.jpg' %}" class="img-fluid" />
               </div>
               <div class="col-md-6 caption">
                 <span class="post-tag">#music</span>
@@ -22,7 +23,7 @@
         <section class="col-md-4 wow fadeIn">
           <div class="post">
             <div class="media">
-              <img src="media/uploads/DeathtoStock_EnergyandSerenity4.jpg" class="img-fluid" />
+              <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity4.jpg' %}" class="img-fluid" />
             </div>
             <div class="caption text-center">
               <a href="{% url 'blog:post' %}" class="post-title">I'm only breathing</a>
@@ -50,7 +51,7 @@
         <section class="col-md-4 wow fadeIn">
           <div class="post">
             <div class="media">
-              <img src="media/uploads/DeathtoStock_EnergyandSerenity6.jpg" class="img-fluid" />
+              <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity6.jpg' %}" class="img-fluid" />
             </div>
             <div class="caption text-center">
               <a href="{% url 'blog:post' %}" class="post-title">You're sharp alright</a>
@@ -64,7 +65,7 @@
             <div class="caption">
 
               <div class="post-thumb">
-                <img src="media/uploads/DeathtoStock_EnergyandSerenity31.jpg" class="img-fluid" />
+                <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity31.jpg' %}" class="img-fluid" />
               </div>
 
               <span class="post-tag">#music</span>
@@ -81,7 +82,7 @@
         <section class="col-md-4 wow fadeIn" style="display:none;">
           <div class="post">
             <div class="media">
-              <img src="media/uploads/DeathtoStock_EnergyandSerenity10.jpg" class="img-fluid" />
+              <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity10.jpg' %}" class="img-fluid" />
             </div>
             <div class="caption text-center">
               <a href="{% url 'blog:post' %}" class="post-title">Can we</a>
@@ -100,7 +101,7 @@
                 <p class="post-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. <a href="#">Aenean massa</a>. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean commodo ligula eget dolor.</p>
               </div>
               <div class="col-md-6 media">
-                <img src="media/uploads/DeathtoStock_EnergyandSerenity31.jpg" class="img-fluid" />
+                <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity31.jpg' %}" class="img-fluid" />
               </div>
             </div>
           </div>
@@ -109,7 +110,7 @@
         <section class="col-md-4 wow fadeIn" style="display:none;">
           <div class="post">
             <div class="media">
-              <img src="media/uploads/DeathtosStockSerenity9.jpg" class="img-fluid" />
+              <img src="{% media 'uploads/DeathtosStockSerenity9.jpg' %}" class="img-fluid" />
             </div>
             <div class="caption text-center">
               <a href="{% url 'blog:post' %}" class="post-title">Loose lips</a>
@@ -121,7 +122,7 @@
         <section class="col-md-4 wow fadeIn" style="display:none;">
           <div class="post">
             <div class="media">
-              <img src="media/uploads/DeathtoStock_EnergyandSerenity2.jpg" class="img-fluid" />
+              <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity2.jpg' %}" class="img-fluid" />
             </div>
             <div class="caption text-center">
               <a href="{% url 'blog:post' %}" class="post-title">Sink</a>
@@ -133,7 +134,7 @@
         <section class="col-md-4 wow fadeIn" style="display:none;">
           <div class="post">
             <div class="media">
-              <img src="media/uploads/DeathtoStock_EnergyandSerenity5.jpg" class="img-fluid" />
+              <img src="{% media 'uploads/DeathtoStock_EnergyandSerenity5.jpg' %}" class="img-fluid" />
             </div>
             <div class="caption text-center">
               <a href="{% url 'blog:post' %}" class="post-title">Ships</a>
@@ -144,7 +145,7 @@
 
         <div class="col-md-12">
           <div class="text-center">
-            <a href="#" class="btn btn-ada-light load-more">Older posts</a>
+            <a href="#" class="btn ada-btn btn-ada-light load-more">Older posts</a>
           </div>
         </div>
 

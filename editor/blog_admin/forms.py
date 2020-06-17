@@ -18,7 +18,7 @@ class LoginForm(AuthenticationForm):
         self.helper.form_id = 'id-LoginForm'
         self.helper.form_class = 'form-group'
         self.form_method = 'post'
-        self.helper.form_action = reverse(settings.LOGIN_URL)
+        self.helper.form_action = reverse('blog_admin:' + settings.LOGIN_URL)
 
         self.helper.add_input(layout.Submit('login', 'Login'))
         self.helper.add_input(layout.Hidden('next', ''))
@@ -47,7 +47,7 @@ class RegisterForm(UserCreationForm):
         self.helper.form_id = 'id-RegistrationForm'
         self.helper.form_class = 'form-group'
         self.helper.form_method = 'post'
-        self.helper.form_action = reverse('register')
+        self.helper.form_action = reverse('blog_admin:register')
 
         self.helper.layout = layout.Layout(
             layout.Field('username'),
@@ -93,7 +93,7 @@ class PostForm(forms.ModelForm):
         self.helper.form_id = 'id-PostCreateForm'
         self.helper.form_class = 'form-group'
         self.helper.form_method = 'post'
-        self.helper.form_action = reverse('create_post')
+        self.helper.form_action = reverse('blog_admin:create_post')
 
         # self.helper.layout = layout.Layout(
         #     layout.Field('title'),
@@ -112,7 +112,9 @@ class PostForm(forms.ModelForm):
                 'content',
                 layout.ButtonHolder(
                     layout.Button(
-                        'next', 'Next page', css_class='btn-outline-dark'
+                        'next',
+                        'Next page',
+                        css_class='btn-info'
                     )
                 ),
                 css_class='py-3',
@@ -128,12 +130,16 @@ class PostForm(forms.ModelForm):
                         layout.Button(
                             'back',
                             'Previous page',
-                            css_class='btn-outline-dark'
+                            css_class='btn-info'
                         ),
                         css_class='col-md-6'
                     ),
                     layout.Div(
-                        layout.Submit('submit', 'Create post'),
+                        layout.Submit(
+                            'submit',
+                            'Create post',
+                            css_class='btn-default'
+                        ),
                         css_class='col-md-6'
                     )
                 ),

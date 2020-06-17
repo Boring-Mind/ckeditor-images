@@ -3,12 +3,12 @@
 {% block content %}
 <ul>
     {% if user.is_authenticated %}
-    <li><a href="/logout/">Log out</a></li>
-    <li><a href="/admin_panel/">Go to admin panel</a></li>
-    <li><a href="/secret/">Go to secret admin panel</a></li>
+    <li><a href="logout/">Log out</a></li>
+    <li><a href="posts/create/">Create post</a></li>
+    <li><a href="secret/">Go to secret admin panel</a></li>
     {% else %}
-    <li><a href="/login/">Log in</a></li>
-    <li><a href="/register/">Register</a></li>
+    <li><a href="login/">Log in</a></li>
+    <li><a href="register/">Register</a></li>
     {% endif %}
 </ul>
 {% endblock content %}

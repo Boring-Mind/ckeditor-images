@@ -1,6 +1,6 @@
 import pytest
 
-from src.blog_admin.forms import PostForm
+from editor.blog_admin.forms import PostForm
 
 
 # Post form

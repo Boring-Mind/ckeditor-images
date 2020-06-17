@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 
-    <title>Ada Blog</title>
+    <title>{% block title %}Ada Blog{% endblock title%}</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
@@ -21,7 +21,8 @@
     <link href="{% static 'css/ada.css' %}" rel="stylesheet">
     <link href="{% static 'css/ada-themes.css' %}" rel="stylesheet">
 
-    {% block extra_css %}{% endblock extra_css %}
+    {% block extracss %}{% endblock extracss %}
+    {% block extrajs %}{% endblock extrajs %}
 
     <!-- HTML5 shiv for IE8 support -->
     <!--[if lt IE 9]>
@@ -97,7 +98,7 @@
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Your email address">
                 <span class="input-group-btn">
-                  <button class="btn btn-ada-dark" type="button">Subscribe</button>
+                  <button class="btn ada-btn btn-ada-dark" type="button">Subscribe</button>
                 </span>
               </div>
             </div>
@@ -144,11 +145,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/js/bootstrap.min.js" integrity="sha256-oKpAiD7qu3bXrWRVxnXLV1h7FlNV+p5YJBIr8LOCFYw=" crossorigin="anonymous"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js" integrity="sha256-z6FznuNG1jo9PP3/jBjL6P3tvLMtSwiVAowZPOgo56U=" crossorigin="anonymous"></script>
 
-    {% block extra_js %}{% endblock extra_js %}
-
     <!-- Theme Scripts -->
     <script defer src="{% static 'js/blog.js' %}"></script>
-
 
   </body>
 </html>

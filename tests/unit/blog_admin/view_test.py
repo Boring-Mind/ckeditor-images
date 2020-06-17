@@ -5,8 +5,8 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.urls import reverse
 # from model_bakery import baker
 
-# from src.blog_admin.models import Post as PostModel
-from src.blog_admin.views import RegisterView, PostFormView
+# from editor.blog_admin.models import Post as PostModel
+from editor.blog_admin.views import RegisterView, PostFormView
 
 
 # Register view
@@ -16,7 +16,7 @@ from src.blog_admin.views import RegisterView, PostFormView
 @pytest.mark.django_db
 def test_register_view_returns_redirect(rf, user, django_user_model):
     # Get the request with the users data
-    request = rf.post(reverse('register'), {
+    request = rf.post(reverse('blog_admin:register'), {
         'username': user.username,
         'email': user.email,
         'password': user.password
@@ -42,7 +42,7 @@ def test_register_view_returns_redirect(rf, user, django_user_model):
         "User is not logged in"
     assert response.status_code == 302, \
         "Response is not redirect response"
-    assert response.url == reverse('home'), \
+    assert response.url == reverse('blog_admin:home'), \
         "Response does not redirect to the correct page"
 
 # PostForm view
@@ -51,7 +51,7 @@ def test_register_view_returns_redirect(rf, user, django_user_model):
 
 def test_post_form_view_form_invalid(rf):
     # Making an empty response with correct url
-    request = rf.post(reverse('create_post'), {})
+    request = rf.post(reverse('blog_admin:create_post'), {})
     # Setup PostFormView instance
     view = PostFormView()
     view.setup(request)
@@ -97,7 +97,7 @@ def test_post_form_view_form_invalid(rf):
 #     }
 
 #     # Get request object with data in it
-#     request = rf.post(reverse('create_post'), data)
+#     request = rf.post(reverse('blog_admin:create_post'), data)
 
 #     # Mock the form object
 #     form = MagicMock()
