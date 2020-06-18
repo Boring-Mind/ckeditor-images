@@ -1,0 +1,51 @@
+.post-tags {
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.max-70vh {
+    max-height: 70vh;
+}
+
+.container p {
+    font-family: Georgia, serif;
+    color: rgb(41, 41, 41);
+    font-weight: 400;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-size: 21px;
+    line-height: 32px;
+}
+
+.post .post-tag {
+    font-size: 17px;
+}
+
+#single .caption {
+    margin: 1em auto 40px auto;
+}
+
+.post {
+    background: #fff;
+}
+
+.image {
+    text-align: center;
+}
+
+.image img {
+    max-height: 70vh;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+blockquote {
+    overflow: hidden;
+    padding-right: 1.5em;
+    padding-left: 1.5em;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    border-left: 5px solid #ccc;
+}
