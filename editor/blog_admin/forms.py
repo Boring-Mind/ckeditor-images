@@ -18,7 +18,7 @@ class LoginForm(AuthenticationForm):
         self.helper.form_id = 'id-LoginForm'
         self.helper.form_class = 'form-group'
         self.form_method = 'post'
-        self.helper.form_action = reverse('blog_admin:' + settings.LOGIN_URL)
+        self.helper.form_action = reverse(settings.LOGIN_URL)
 
         self.helper.add_input(layout.Submit('login', 'Login'))
         self.helper.add_input(layout.Hidden('next', ''))
@@ -114,10 +114,10 @@ class PostForm(forms.ModelForm):
                     layout.Button(
                         'next',
                         'Next page',
-                        css_class='btn-info'
+                        css_class='btn-dark'
                     )
                 ),
-                css_class='py-3',
+                css_class='m-5',
                 css_id='form1'
             ),
             layout.Div(
@@ -130,7 +130,7 @@ class PostForm(forms.ModelForm):
                         layout.Button(
                             'back',
                             'Previous page',
-                            css_class='btn-info'
+                            css_class='btn-dark'
                         ),
                         css_class='col-md-6'
                     ),
@@ -138,12 +138,12 @@ class PostForm(forms.ModelForm):
                         layout.Submit(
                             'submit',
                             'Create post',
-                            css_class='btn-default'
+                            css_class='btn-success float-right'
                         ),
                         css_class='col-md-6'
                     )
                 ),
-                css_class='py-3 d-none',
+                css_class='m-5 d-none',
                 css_id='form2'
             ),
         )

@@ -152,7 +152,7 @@ MAXIMUM_UPLOAD_SIZE = int(2.5 * 1024 * 1024)
 
 # Authentication urls
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'blog_admin:login'
 
 LOGIN_REDIRECT_URL = 'blog_admin:home'
 

@@ -1,7 +1,7 @@
 var hashtags_input = document.querySelector("input#hashtags_input")
 
-// var buttons = document.querySelector(".btn")
-// buttons.classList.remove("btn");
+var subscribe_button = document.querySelector(".btn-ada-dark")
+subscribe_button.classList.remove("btn");
 
 tagify = new Tagify(hashtags_input, {
     maxTags: 5,
