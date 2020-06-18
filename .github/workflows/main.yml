@@ -18,6 +18,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run coverage test
       run: |
+        pytest --cov=.
         bash <(curl -s https://codecov.io/bash)
 
   security-checks:
