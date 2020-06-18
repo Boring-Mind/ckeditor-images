@@ -8,6 +8,7 @@ from editor.blog_admin.models import Post as PostModel
 ##############################################
 
 
+@pytest.mark.webtest
 @pytest.mark.django_db
 def test_register_view_saves_user_and_logs_in(browser, user_with_delete):
     browser.visit('http://127.0.0.1:8000' + reverse('blog_admin:register'))
