@@ -10,7 +10,7 @@ from editor.blog_admin.models import Post as PostModel
 
 @pytest.mark.django_db
 def test_register_view_saves_user_and_logs_in(browser, user_with_delete):
-    browser.visit('http://127.0.0.1:8000/register/')
+    browser.visit('http://127.0.0.1:8000' + reverse('blog_admin:register'))
     assert browser.title == 'Register'
 
     browser.fill('username', user_with_delete.username)
@@ -21,7 +21,7 @@ def test_register_view_saves_user_and_logs_in(browser, user_with_delete):
     browser.find_by_name('submit').click()
     assert browser.title == 'Blog home'
 
-    browser.visit('http://127.0.0.1:8000/logout/')
+    browser.visit('http://127.0.0.1:8000' + reverse('blog_admin:logout'))
     assert browser.title == 'Blog home'
 
 # PostForm view
@@ -84,4 +84,4 @@ def test_post_form_view_form_valid(client, django_user_model):
 
     # Testing response
     assert response.status_code == 302
-    assert response.url == reverse('home')
+    assert response.url == reverse('blog:post')

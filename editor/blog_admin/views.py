@@ -3,6 +3,7 @@ from typing import List
 
 from django.contrib.auth import views as auth_views, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.forms import Form
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -51,9 +52,20 @@ class PostFormView(LoginRequiredMixin, FormView):
         return [item["value"] for item in array if item["value"]]
 
     @classmethod
-    def retrieve_stored_tags(cls):
+    def retrieve_stored_tags(cls) -> List[str]:
+        # ToDo: refactor
+        # use tag objects from the get_stored_tag_objects method
+        # and parse text values from them
         tags = Hashtags.objects.all().values()
         return [tag['text'] for tag in tags]
+
+    def get_stored_tag_objects(self, post_tag_values: List[str]) -> List[Hashtags]:
+        tags = Hashtags.objects.all()
+
+        return [
+            tag for tag in tags
+            if tag.text in post_tag_values
+        ]
 
     def filter_new_tags(self, post_tags: List[str]) -> List[TagForm]:
         """Filter all the tags, which are not present in the db."""
@@ -75,7 +87,7 @@ class PostFormView(LoginRequiredMixin, FormView):
         # Don't work in sqlite, but works for postgresql
         # new_hashtags = Hashtags.objects.bulk_create(new_hashtags)
 
-    def get_user(self):
+    def get_user(self) -> User:
         """Return user object from request."""
         return self.request.user
 
@@ -92,13 +104,14 @@ class PostFormView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         """Process and save form data and return back an RedirectResponse."""
         # ToDo: Add unit tests
-        # ToDo: Refactor (extract method)
+        # ToDo: Refactor (extract method, extract class (form and tags))
         # Convert received hashtags from json format to the list[str]
         hashtags = PostFormView.parse_hashtags(
             form.cleaned_data['hashtags']
         )
         self.stored_tags = PostFormView.retrieve_stored_tags()
 
+        # ToDo: Refactor next 8 lines (extract method, form validation)
         # Filter new tags, validate them and save them to db
         new_tags = self.filter_new_tags(hashtags)
 
@@ -113,11 +126,7 @@ class PostFormView(LoginRequiredMixin, FormView):
         post = self.save_post(form)
 
         # Select all tags, which are linked with current post
-        post_tags = [
-            Hashtags(text=tag) for tag in hashtags
-            if tag in self.stored_tags
-        ]
-        post_tags.extend(new_tags)
+        post_tags = self.get_stored_tag_objects(hashtags)
 
         # Link created hashtags with the post object in the db
         for tag in post_tags:

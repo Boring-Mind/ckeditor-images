@@ -120,9 +120,9 @@ class IntegrationTests(TestCase):
     # -----------------------------------------
     # TESTS
 
-    def test_use_editor_template(self):
-        response = self.client.get('/')
-        self.assertTemplateUsed(response, 'editor.html')
+    # def test_use_editor_template(self):
+    #     response = self.client.get('/')
+    #     self.assertTemplateUsed(response, 'editor.html')
 
     def test_return_404_on_get_request(self):
         response = self.client.get('/upload/')

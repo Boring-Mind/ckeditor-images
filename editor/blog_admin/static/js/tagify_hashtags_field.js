@@ -10,7 +10,7 @@ tagify = new Tagify(hashtags_input, {
 });
 
 async function getTags() {
-    const url = 'http://127.0.0.1:8000/tags/get/'
+    const url = 'http://127.0.0.1:8000/admin/tags/get/'
     const response = await fetch(url, {
         method: 'GET',
         headers: {
