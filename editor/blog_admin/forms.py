@@ -20,8 +20,19 @@ class LoginForm(AuthenticationForm):
         self.form_method = 'post'
         self.helper.form_action = reverse(settings.LOGIN_URL)
 
-        self.helper.add_input(layout.Submit('login', 'Login'))
-        self.helper.add_input(layout.Hidden('next', ''))
+        self.helper.layout = layout.Layout(
+            'username',
+            'password',
+            layout.Div(
+                layout.Submit(
+                    'login',
+                    'Login',
+                    css_class='btn-success my-2 px-4'
+                ),
+                css_class='text-center'
+            ),
+            layout.Hidden('next', '')
+        )
 
 
 class RegisterForm(UserCreationForm):
@@ -54,8 +65,13 @@ class RegisterForm(UserCreationForm):
             layout.Field('email'),
             layout.Field('password1'),
             layout.Field('password2'),
-            layout.ButtonHolder(
-                layout.Submit('submit', 'Register')
+            layout.Div(
+                layout.Submit(
+                    'submit',
+                    'Register',
+                    css_class='btn-success my-2 px-4'
+                ),
+                css_class='text-center'
             )
         )
 

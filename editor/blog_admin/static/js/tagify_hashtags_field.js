@@ -1,7 +1,7 @@
 var hashtags_input = document.querySelector("input#hashtags_input")
 
-var subscribe_button = document.querySelector(".btn-ada-dark")
-subscribe_button.classList.remove("btn");
+// var subscribe_button = document.querySelector(".btn-ada-dark")
+// subscribe_button.classList.remove("btn");
 
 tagify = new Tagify(hashtags_input, {
     maxTags: 5,
@@ -10,7 +10,7 @@ tagify = new Tagify(hashtags_input, {
 });
 
 async function getTags() {
-    const url = 'http://127.0.0.1:8000/blog/admin/tags/get/'
+    const url = 'http://127.0.0.1:8000/tags/get/'
     const response = await fetch(url, {
         method: 'GET',
         headers: {

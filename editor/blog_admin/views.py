@@ -39,7 +39,7 @@ class TagsRetrieveView(LoginRequiredMixin, View):
 class PostFormView(LoginRequiredMixin, FormView):
     template_name = 'post-create.html'
     form_class = PostForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('blog:post')
     # Holds tags which already exists in db
     stored_tags = []
     # Holds tags which are present in the post
@@ -130,7 +130,7 @@ class PostFormView(LoginRequiredMixin, FormView):
 class RegisterView(FormView):
     form_class = RegisterForm
     template_name = 'register.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('blog_admin:home')
 
     def form_valid(self, form):
         new_user = form.save()
