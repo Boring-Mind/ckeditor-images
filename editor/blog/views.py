@@ -19,9 +19,9 @@ def contact_view(request):
 def about_view(request):
     return render(request, 'page-about.html')
 
-
-def post_view(request):
-    return render(request, 'post-detail.html')
+# deprecated
+# def post_view(request):
+#     return render(request, 'post-detail.html')
 
 
 class PostDetailView(DetailView):
@@ -37,3 +37,10 @@ class PostDetailView(DetailView):
         context['hashtags'] = [tag['text'] for tag in tags]
 
         return context
+
+
+class PostLatestView(PostDetailView):
+
+    def get_object(self, queryset=None):
+        post = PostModel.objects.latest('id')
+        return post

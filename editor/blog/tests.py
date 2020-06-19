@@ -20,7 +20,3 @@ class IntegrationTests(TestCase):
     def test_uses_about_view(self):
         response = self.client.get(reverse('blog:about'))
         self.assertTemplateUsed(response, 'page-about.html')
-
-    def test_uses_post_view(self):
-        response = self.client.get(reverse('blog:post'))
-        self.assertTemplateUsed(response, 'post-detail.html')

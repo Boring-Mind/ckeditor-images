@@ -137,13 +137,14 @@ class IntegrationTests(TestCase):
         
         self.file_cleanup(response)
 
-    def test_return_200_on_www_content_type_upload(self):
-        response = self.client.post(
-            '/upload/',
-            data=urlencode({'article_body': 's'}),
-            content_type='application/x-www-form-urlencoded',
-        )
-        self.assertEqual(response.status_code, 200)
+    # deprecated
+    # def test_return_200_on_www_content_type_upload(self):
+    #     response = self.client.post(
+    #         '/upload/',
+    #         data=urlencode({'article_body': 's'}),
+    #         content_type='application/x-www-form-urlencoded',
+    #     )
+    #     self.assertEqual(response.status_code, 200)
 
     def test_return_415_on_invalid_content_type_upload(self):
         response = self.client.post('/upload/', content_type='wrong-type')

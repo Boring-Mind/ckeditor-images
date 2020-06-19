@@ -40,7 +40,7 @@ class TagsRetrieveView(LoginRequiredMixin, View):
 class PostFormView(LoginRequiredMixin, FormView):
     template_name = 'post-create.html'
     form_class = PostForm
-    success_url = reverse_lazy('blog:post')
+    success_url = reverse_lazy('blog:post_latest')
     # Holds tags which already exists in db
     stored_tags = []
     # Holds tags which are present in the post
