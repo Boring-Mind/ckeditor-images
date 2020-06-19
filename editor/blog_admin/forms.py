@@ -109,7 +109,7 @@ class PostForm(forms.ModelForm):
         self.helper.form_id = 'id-PostCreateForm'
         self.helper.form_class = 'form-group'
         self.helper.form_method = 'post'
-        self.helper.form_action = reverse('blog_admin:create_post')
+        self.helper.form_action = reverse('blog_admin:home')
 
         # self.helper.layout = layout.Layout(
         #     layout.Field('title'),

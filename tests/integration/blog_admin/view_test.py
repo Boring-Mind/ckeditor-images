@@ -20,10 +20,10 @@ def test_register_view_saves_user_and_logs_in(browser, user_with_delete):
     browser.fill('password2', user_with_delete.password)
 
     browser.find_by_name('submit').click()
-    assert browser.title == 'Blog home'
+    assert browser.title == 'Create post'
 
     browser.visit('http://127.0.0.1:8000' + reverse('blog_admin:logout'))
-    assert browser.title == 'Blog home'
+    assert browser.title == 'Login'
 
 # PostForm view
 ##############################################
@@ -51,7 +51,7 @@ def test_post_form_view_form_valid(client, django_user_model):
         'post_status': 'DR'
     }
 
-    response = client.post(reverse('blog_admin:create_post'), data=data)
+    response = client.post(reverse('blog_admin:home'), data=data)
 
     post = PostModel.objects.filter(
         title=data['title'], content=data['content']

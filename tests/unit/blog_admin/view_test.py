@@ -51,7 +51,7 @@ def test_register_view_returns_redirect(rf, user, django_user_model):
 
 def test_post_form_view_form_invalid(rf):
     # Making an empty response with correct url
-    request = rf.post(reverse('blog_admin:create_post'), {})
+    request = rf.post(reverse('blog_admin:home'), {})
     # Setup PostFormView instance
     view = PostFormView()
     view.setup(request)
