@@ -1,0 +1,13 @@
+<section class="col-md-4 wow fadeIn">
+    <div class="post">
+        <div class="caption">
+            <div class="post-thumb">
+                <img src="{{ post.img_url }}" class="img-fluid" />
+            </div>
+            <span class="post-tag">{{ post.hashtags }}</span>
+            <a href="{% url 'blog:post' %}" class="post-title">{{ post.title }}</a>
+            <p class="post-description">{{ post.description }}</p>
+            <span class="post-date">{{ post.date }}</span>
+        </div>
+    </div>
+</section>

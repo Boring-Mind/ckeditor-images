@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.test import TestCase
+from django.utils.http import urlencode
 
 from editor.editor.image_process import ImageProcess, StatusMessages
 from editor.webutils.urlutils import URLUtils
@@ -80,6 +81,11 @@ class IntegrationTests(TestCase):
         """
         return os.urandom(length)
 
+    def get_fake_uploading_img(self, length: int) -> dict:
+        """Generate fake POST request payload for /upload/ page."""
+        data = self.get_long_byte_string(length)
+        return {'upload': BytesIO(data)}
+
     # -----------------------------------------
     # CASES
     # 
@@ -107,24 +113,49 @@ class IntegrationTests(TestCase):
 
         Length cannot be more than 1000 or smaller than zero.
         """
-        data = self.get_long_byte_string(length)
-        return self.client.post('/upload/', {
-            'upload': BytesIO(data)
-        })
+        return self.client.post(
+            '/upload/', self.get_fake_uploading_img(length)
+        )
 
     # -----------------------------------------
     # TESTS
+
+    # def test_use_editor_template(self):
+    #     response = self.client.get('/')
+    #     self.assertTemplateUsed(response, 'editor.html')
 
     def test_return_404_on_get_request(self):
         response = self.client.get('/upload/')
         self.assertEqual(response.status_code, 404)
 
+    def test_return_200_on_multipart_content_type_upload(self):
+        """Hint: content type in POST request is MULTIPART by default."""
+        response = self.open_image_and_post_it('image.jpg')
+        
+        # If url is returned, then request is successful
+        self.assertIn('url', response)
+        
+        self.file_cleanup(response)
+
+    # deprecated
+    # def test_return_200_on_www_content_type_upload(self):
+    #     response = self.client.post(
+    #         '/upload/',
+    #         data=urlencode({'article_body': 's'}),
+    #         content_type='application/x-www-form-urlencoded',
+    #     )
+    #     self.assertEqual(response.status_code, 200)
+
+    def test_return_415_on_invalid_content_type_upload(self):
+        response = self.client.post('/upload/', content_type='wrong-type')
+        self.assertEqual(response.status_code, 415)
+
     def test_failed_response_does_not_contain_img_url(self):
         response = self.open_image_and_post_it('html_page.jpg')
             
         # There cannot be an urls in a failed request
-        self.assertTrue('url' not in response)
-        self.assertTrue('urls' not in response)
+        self.assertNotIn('url', response)
+        self.assertNotIn('urls', response)
 
     def test_return_filenames_on_success_image_upload(self):
         response = self.open_image_and_post_it('image.jpg')
@@ -144,10 +175,23 @@ class IntegrationTests(TestCase):
         )
         self.assertEqual(ref_error, error)
 
+    def test_return_error_on_empty_file_field(self):
+        """Test form_invalid branch in images::process_images."""
+        ref_error = 'Failed to load image file'
+
+        # Sending empty response causes ImageForm validation fail
+        response = self.client.post(
+            '/upload/', self.get_fake_uploading_img(0)
+        )
+        error = self.get_error_from_response(json.loads(response.content))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(error, ref_error)
+
     def test_success_response_doesnt_contain_err_message(self):
         response = self.open_image_and_post_it('image.jpg')
         # There cannot be an error message in a successful request
-        self.assertTrue('error' not in response)
+        self.assertNotIn('error', response)
 
         self.file_cleanup(response)
 
@@ -179,7 +223,7 @@ class IntegrationTests(TestCase):
 
         self.file_cleanup(response)
 
-    def test_long_requests_are_refused(self):
+    def test_large_requests_are_refused(self):
         """Requests, larger than the maximum upload size are accepted."""
         length = settings.MAXIMUM_UPLOAD_SIZE
         

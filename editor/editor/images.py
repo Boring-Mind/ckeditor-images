@@ -22,7 +22,7 @@ class ImageUpload():
 
         return {'image': image}
 
-    def get_response(self):
+    def get_response(self) -> JsonResponse:
         """Check image and get corresponding response."""
         img_status = self.impr_instance.check_image()
         if img_status == StatusMessages.OK:
@@ -31,7 +31,7 @@ class ImageUpload():
         else:
             return JsonResponse({'error': {'message': img_status}}, status=415)
 
-    def save_image_to_db(self):
+    def process_images(self) -> JsonResponse:
         image_data = self.get_image_data()
 
         form = ImageForm(self.request.POST, image_data)
@@ -42,8 +42,6 @@ class ImageUpload():
         # Add function to cleanup form data from server
         # self.impr_instance.remove_image()
         
-        raise ValidationError('Invalid data in the Image form')
-
-    def process_images(self):
-        return self.save_image_to_db()
-        # return JsonResponse(response)
+        return JsonResponse(
+            {'error': {'message': 'Failed to load image file'}}, status=400
+        )
