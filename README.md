@@ -3,6 +3,7 @@
 ![master](https://github.com/Boring-Mind/ckeditor-images/workflows/master/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/Boring-Mind/ckeditor-images/branch/master/graph/badge.svg)](https://codecov.io/gh/Boring-Mind/ckeditor-images)
 [![Code Quality Score](https://www.code-inspector.com/project/6845/status/svg)](https://www.code-inspector.com/)
+[![Website boringmind.pythonanywhere.com](https://img.shields.io/website-up-down-green-red/https/naereen.github.io.svg)](https://boringmind.pythonanywhere.com/)
 
 
 The app is an example of blog, which supports adding articles with images and embedded videos via the CKEditor5 - WYSIWYG editor.
@@ -18,6 +19,17 @@ The app is an example of blog, which supports adding articles with images and em
 ## Will be added:
 1. Storing image paths in the article model in order to delete images with article
 2. Blog page with articles list
+
+## Project Demo
+### Main page
+![some text](https://ibb.co/xm8R4yk)
+
+### Blog detail page
+![safas](https://ibb.co/98nrDX7)
+
+### Admin page
+Admin page is located by the url "/admin/". By default it's protected by password.
+![dasdasd](https://ibb.co/wK7hbVB)
 
 ## Used technologies:
 #### CI (GitHub Actions):
