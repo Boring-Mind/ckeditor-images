@@ -22,14 +22,14 @@ The app is an example of blog, which supports adding articles with images and em
 
 ## Project Demo
 ### Main page
-![some text](https://ibb.co/xm8R4yk)
+![Main page gif](demo/main-page.gif)
 
 ### Blog detail page
-![safas](https://ibb.co/98nrDX7)
+![Blog detail page gif](demo/blog-page.gif)
 
 ### Admin page
 Admin page is located by the url "/admin/". By default it's protected by password.
-![dasdasd](https://ibb.co/wK7hbVB)
+![Admin page gif](demo/blog-admin-page.gif)
 
 ## Used technologies:
 #### CI (GitHub Actions):
