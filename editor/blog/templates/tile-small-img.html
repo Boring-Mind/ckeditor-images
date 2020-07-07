@@ -1,13 +1,21 @@
 <section class="col-md-4 wow fadeIn">
     <div class="post">
         <div class="caption">
-            <div class="post-thumb">
-                <img src="{{ post.img_url }}" class="img-fluid" />
+            <div class="row">
+                <div class="col-3 p-0">
+                    <div class="thumbnail" style="background-image: url({{ post.preview_img_url }});">
+                        <!-- <img src="{{ post.preview_img_url }}" class="img-fluid" /> -->
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="container p-none">
+                        <span class="post-tag">{{ hashtag }}</span>
+                        <a href="{% url 'blog:post_latest' %}" class="post-title">{{ post.title }}</a>
+                    </div>
+                </div>
             </div>
-            <span class="post-tag">{{ post.hashtags }}</span>
-            <a href="{% url 'blog:post' %}" class="post-title">{{ post.title }}</a>
             <p class="post-description">{{ post.description }}</p>
-            <span class="post-date">{{ post.date }}</span>
+            <span class="post-date">{{ post.post_date }}</span>
         </div>
     </div>
 </section>

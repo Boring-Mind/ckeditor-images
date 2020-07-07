@@ -1,0 +1,52 @@
+.thumbnail {
+    height: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+#posts .post {
+    height: unset;
+}
+
+#posts .card {
+    background: #fff;
+    margin: 20px;
+    height: auto;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.03);
+    -moz-box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.03);
+    box-shadow: 0px 3px 4px 0px rgba(0,0,0,0.03);
+}
+
+.post .post-title {
+    font-size: 21.5px;
+}
+
+.card .card-title {
+    color: #000;
+    font-size: 21.5px;
+    text-decoration: none;
+    text-align: center;
+    line-height: 1.42857143;
+}
+
+.card .card-text {
+    text-align: justify;
+}
+
+.card .post-tag {
+    color: #FF7C26;
+    display: block;
+    font-size: 15px;
+    text-transform: lowercase;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.card .post-date {
+    color: #727272;
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+}

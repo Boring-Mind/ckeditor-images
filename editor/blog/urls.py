@@ -16,4 +16,5 @@ urlpatterns = [
         'posts/latest/', views.PostLatestView.as_view(), name="post_latest"
     ),
     path('404/', views.page_not_found_view, name="404"),
+    path('test/', views.test_view, name="test_view"),
 ]

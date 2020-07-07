@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
+from django.http import HttpResponse
 
 from editor.blog_admin.models import Post as PostModel
 
@@ -19,9 +20,18 @@ def contact_view(request):
 def about_view(request):
     return render(request, 'page-about.html')
 
-# deprecated
-# def post_view(request):
-#     return render(request, 'post-detail.html')
+
+def test_view(request):
+    if request.method == 'GET':
+        # import pdb; pdb.set_trace()
+        post = PostModel.objects.latest('id')
+        hashtag = post.hashtags.all().values().first()['text']
+        # hashtags = [tag['text'] for tag in hashtags]
+        return render(
+            request, 'test.html', {'post': post, 'hashtag': hashtag}
+        )
+    else:
+        return HttpResponse('', status=404)
 
 
 class PostDetailView(DetailView):

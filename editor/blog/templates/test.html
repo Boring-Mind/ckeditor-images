@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Templates test{% endblock title %}
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'css/home_page_styles.css' %}" />
+{% endblock extracss %}
+
+{% block content %}
+<div id="posts" class="container">
+    <div class="row">
+        {% include 'tile-big-reversed.html' %}
+    </div>
+    <div class="row">
+        {% include 'tile-big.html' %}
+    </div>
+    <div class="row">
+        {% include 'tile-small-img.html' %}
+    </div>
+    <div class="row">
+        {% include 'tile-bs-card.html' %}
+    </div>
+</div>
+{% endblock content %}
