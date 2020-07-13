@@ -7,7 +7,9 @@
     max-height: 70vh;
 }
 
-.container p {
+.post p,
+.post ul,
+.post ol {
     font-family: Georgia, serif;
     color: rgb(41, 41, 41);
     font-weight: 400;
@@ -15,6 +17,17 @@
     overflow-wrap: break-word;
     font-size: 21px;
     line-height: 32px;
+}
+
+.post li {
+    margin-top: 0.8em;
+}
+
+.post h3 {
+    line-height: 40px;
+    margin-top: 1.5em;
+    font-size: 28px;
+    font-weight: 600;
 }
 
 .post .post-tag {

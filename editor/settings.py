@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'editor.templatetags',
     'editor.blog_admin',
+    'debugtools',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +69,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            # ToDo: move to the development settings
+            'builtins': [
+                "debugtools.templatetags.debugtools_tags",
             ],
         },
     },
@@ -165,3 +170,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Post creation
 
 MAX_POST_LENGTH = 15000
+
+# Posts page settings
+
+POSTS_PER_PAGE = 6

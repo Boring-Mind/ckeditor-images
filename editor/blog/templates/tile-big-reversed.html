@@ -1,14 +1,14 @@
-<section class="col-md-8 wow fadeIn" style="display:none;">
+<section class="col-md-8 wow fadeIn">
     <div class="post">
         <div class="row">
             <div class="col-md-6 caption">
-                <span class="post-tag">{{ hastags }}</span>
-                <a href="{% url 'blog:post_latest' %}" class="post-title">{{ post.title }}</a>
-                <span class="post-date">{{ post.date }}</span>
-                <p class="post-description">{{ post.description }}</p>
+                <span class="post-tag">{{ object.tag }}</span>
+                <a href="{% url 'blog:post_latest' %}" class="post-title">{{ object.post.title }}</a>
+                <span class="post-date">{{ object.post.date }}</span>
+                <p class="post-description">{{ object.post.description }}</p>
             </div>
             <div class="col-md-6 media">
-                <div class="thumbnail" style="background-image: url({{ post.preview_img_url }});"></div>
+                <div class="thumbnail" style="background-image: url({{ object.post.preview_img_url }});"></div>
                 <!-- <img src="{{ post.preview_img_url }}" class="img-fluid" /> -->
             </div>
         </div>

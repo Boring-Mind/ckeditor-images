@@ -578,8 +578,7 @@ fieldset[disabled] .navbar-ada .btn-link:focus {
   color: #FF7C26;
   display: block;
   font-size: 15px;
-  text-transform: lowercase;
-  margin: 5px 0;
+  margin: 5px 0 15px 0;
 }
 
 .post .post-title {

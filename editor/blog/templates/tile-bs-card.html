@@ -1,11 +1,11 @@
 <section class="col-md-4 wow fadeIn">
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="{{ post.preview_img_url }}" alt="Card image cap">
+        <img class="card-img-top" src="{{ object.post.preview_img_url }}">
         <div class="card-body">
-            <span class="post-tag">{{ hashtag }}</span>
-            <p class="card-title">{{ post.title }}</p>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <span class="post-date">{{ post.post_date }}</span>
+            <span class="post-tag">{{ object.tag }}</span>
+            <p class="card-title">{{ object.post.title }}</p>
+            <p class="card-text">{{ object.post.description }}</p>
+            <span class="post-date">{{ object.post.post_date }}</span>
         </div>
     </div>
 </section>

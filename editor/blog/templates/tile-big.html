@@ -2,13 +2,13 @@
     <div class="post">
         <div class="row">
             <div class="col-md-6 media">
-                <img src="{{ post.preview_img_url }}" class="img-fluid" />
+                <img src="{{ object.post.preview_img_url }}" class="img-fluid" />
             </div>
             <div class="col-md-6 caption">
-                <span class="post-tag">{{ hashtag }}</span>
-                <a href="{% url 'blog:post_latest' %}" class="post-title">{{ post.title }}</a>
-                <span class="post-date">{{ post.date }}</span>
-                <p class="post-description">{{ post.description }}</p>
+                <span class="post-tag">{{ object.tag }}</span>
+                <a href="{% url 'blog:post_latest' %}" class="post-title">{{ object.post.title }}</a>
+                <span class="post-date">{{ object.post.date }}</span>
+                <p class="post-description">{{ object.post.description }}</p>
             </div>
         </div>
     </div>

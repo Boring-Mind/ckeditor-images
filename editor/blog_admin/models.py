@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.http import Http404
 # from django.contrib.auth.validators import UnicodeUsernameValidator
 # from django.utils.translation import gettext_lazy as _
 # from validator import Validator
@@ -69,3 +70,17 @@ class Post(models.Model):
         return (
             f'{self.post_date.strftime("%d.%m.%Y %H:%M")} - \"{self.title}\"'
         )
+
+    # ToDo: add tests
+    def get_first_tag(self):
+        tag = self.hashtags.all().values().first()
+        if tag:
+            return tag['text']
+        return ''
+
+    def get_published_posts_by_date():
+        queryset = Post.objects.filter(post_status='DR')
+        queryset = queryset.order_by('-modified_date')
+        if len(queryset) == 0:
+            raise Http404('No Post object matches the given query.')
+        return queryset
