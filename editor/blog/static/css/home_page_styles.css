@@ -43,6 +43,11 @@
     justify-content: space-between;
 }
 
+/*For large post tiles*/
+.caption .post-date {
+    margin-top: 0.4em;
+}
+
 .card .card-title {
     color: #000;
     font-size: 21.5px;
