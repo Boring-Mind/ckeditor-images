@@ -606,6 +606,7 @@ fieldset[disabled] .navbar-ada .btn-link:focus {
 
 .post .post-description {
   margin: 14px auto;
+  font-size: 15px;
 }
 
 #posts .quote {
