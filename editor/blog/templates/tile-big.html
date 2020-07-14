@@ -2,7 +2,7 @@
     <div class="post">
         <div class="row">
             <div class="col-md-6 media">
-                <img src="{{ object.post.preview_img_url }}" class="img-fluid" />
+                <div class="thumbnail" style="background-image: url({{ object.post.preview_img_url }});"></div>
             </div>
             <div class="col-md-6 caption">
                 <span class="post-tag">{{ object.tag }}</span>

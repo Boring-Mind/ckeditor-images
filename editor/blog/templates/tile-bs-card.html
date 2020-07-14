@@ -1,11 +1,13 @@
 <section class="col-md-4 wow fadeIn">
-    <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="{{ object.post.preview_img_url }}">
-        <div class="card-body">
-            <span class="post-tag">{{ object.tag }}</span>
-            <p class="card-title">{{ object.post.title }}</p>
-            <p class="card-text">{{ object.post.description }}</p>
-            <span class="post-date">{{ object.post.post_date }}</span>
+    <div class="post">
+        <div class="row v-row">
+            <div class="v-col-60">
+                <div class="thumbnail" style="background-image: url({{ object.post.preview_img_url }});"></div>
+            </div>
+            <div class="card-body v-col-40 text-center v-post-caption">
+                <a href="" class="post-title">{{ object.post.title }}</a>
+                <span class="post-date">{{ object.post.post_date }}</span>
+            </div>
         </div>
     </div>
 </section>

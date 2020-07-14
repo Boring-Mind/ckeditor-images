@@ -47,6 +47,7 @@ POST_STATUSES = [
 
 
 class Post(models.Model):
+    # ToDo: Reduce length to 50 chars
     title = models.CharField(max_length=80)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='blog_posts'

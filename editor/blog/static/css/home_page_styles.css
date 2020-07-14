@@ -7,10 +7,6 @@
     width: inherit;
 }
 
-#posts .post {
-    height: unset;
-}
-
 #posts .card {
     background: #fff;
     margin: 20px;
@@ -23,6 +19,28 @@
 
 .post .post-title {
     font-size: 21.5px;
+}
+
+.post .v-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.post .v-col-60 {
+    height: 60%;
+    flex: 0 0 60%;
+}
+
+.post .v-col-40 {
+    height: 40%;
+    flex: 0 0 40%;
+}
+
+.v-post-caption {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .card .card-title {

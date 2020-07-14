@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Cycle test{% endblock title %}
+{% block title %}Post tiles{% endblock title %}
 
 {% block extracss %}
 <link rel="stylesheet" href="{% static 'css/home_page_styles.css' %}" />
@@ -11,7 +11,7 @@
     <div id="posts" class="container">
         <div class="row">
             {% for object in post_list %}
-                {% cycle 'tile-big-reversed.html' 'tile-bs-card.html' 'tile-big.html' 'tile-bs-card.html' as tile_name silent %}
+                {% cycle 'tile-big.html' 'tile-bs-card.html' 'tile-bs-card.html' 'tile-big-reversed.html' as tile_name silent %}
                 {% if forloop.counter0|divisibleby:2 %}
                     <div class="row">
                 {% endif %}

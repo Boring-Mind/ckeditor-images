@@ -488,6 +488,7 @@ fieldset[disabled] .navbar-ada .btn-link:focus {
 #posts .row {
   margin-left: 0;
   margin-right: 0;
+  height: inherit;
 }
 
 #posts {
