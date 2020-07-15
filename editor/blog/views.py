@@ -107,7 +107,7 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         # Retrieving linked tags from the db
-        tags = self.object.hashtags.all().values()
+        tags = self.object.hashtags.values()
         # Parsing tag objects and getting text values
         context['hashtags'] = [tag['text'] for tag in tags]
 
@@ -117,5 +117,5 @@ class PostDetailView(DetailView):
 class PostLatestView(PostDetailView):
 
     def get_object(self, queryset=None):
-        post = PostModel.objects.latest('id')
+        post = PostModel.objects.latest('modified_date')
         return post
