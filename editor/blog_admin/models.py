@@ -74,14 +74,16 @@ class Post(models.Model):
 
     # ToDo: add tests
     def get_first_tag(self):
-        tag = self.hashtags.all().values().first()
+        tag = self.hashtags.first()
         if tag:
-            return tag['text']
+            return tag.text
         return ''
 
     def get_published_posts_by_date():
         queryset = Post.objects.filter(post_status='DR')
+        queryset = queryset.prefetch_related('hashtags')
         queryset = queryset.order_by('-modified_date')
+        queryset = queryset.defer('content')
         if len(queryset) == 0:
             raise Http404('No Post object matches the given query.')
         return queryset

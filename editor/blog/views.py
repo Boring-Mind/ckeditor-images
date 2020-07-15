@@ -44,8 +44,6 @@ class BlogListView(ListView):
 
         tags = [post.get_first_tag() for post in posts]
 
-        posts = posts.values()
-
         post_list = []
         for i, post in enumerate(posts):
             post_list.append(PostWithTag(post, tags[i]))
