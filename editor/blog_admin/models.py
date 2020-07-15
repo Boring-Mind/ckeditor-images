@@ -74,10 +74,19 @@ class Post(models.Model):
 
     # ToDo: add tests
     def get_first_tag(self):
-        if self.tags:
-            # Accessing to the prepopulated hashtags
+        """Return first hashtag from prepopulated list.
+
+        Warning: prefetch_related call required before running this function.
+        Works only on prepopulated tags list.
+        """
+        try:
             return self.tags[0].text
-        return ''
+        except AttributeError:
+            # ToDo: add logging
+            return ''
+        except IndexError:
+            # ToDo: add logging
+            return ''
 
     def get_published_posts_by_date():
         """Select published posts and order them by modified date.
