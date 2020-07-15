@@ -10,7 +10,7 @@
 {% block content %}
     <div id="posts" class="container">
         <div class="row">
-            {% for object in post_list %}
+            {% for post in post_list %}
                 {% cycle 'tile-big.html' 'tile-bs-card.html' 'tile-bs-card.html' 'tile-big-reversed.html' as tile_name silent %}
                 {% if forloop.counter0|divisibleby:2 %}
                     <div class="row">

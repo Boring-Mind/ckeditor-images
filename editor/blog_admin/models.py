@@ -74,16 +74,22 @@ class Post(models.Model):
 
     # ToDo: add tests
     def get_first_tag(self):
-        tag = self.hashtags.first()
-        if tag:
-            return tag.text
+        if self.tags:
+            # Accessing to the prepopulated hashtags
+            return self.tags[0].text
         return ''
 
     def get_published_posts_by_date():
+        """Select published posts and order them by modified date.
+
+        Also Prepopulates related hashtags and saves them
+        to the tags field.
+        """
+        # ToDo: switch post_status to published
         queryset = Post.objects.filter(post_status='DR')
-        queryset = queryset.prefetch_related('hashtags')
+        
+        tag_prefetch = models.Prefetch('hashtags', to_attr='tags')
+        queryset = Post.objects.prefetch_related(tag_prefetch)
+
         queryset = queryset.order_by('-modified_date')
-        queryset = queryset.defer('content')
-        if len(queryset) == 0:
-            raise Http404('No Post object matches the given query.')
-        return queryset
+        return queryset.defer('content')
