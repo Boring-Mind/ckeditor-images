@@ -72,7 +72,6 @@ class Post(models.Model):
             f'{self.post_date.strftime("%d.%m.%Y %H:%M")} - \"{self.title}\"'
         )
 
-    # ToDo: add tests
     def get_first_tag(self):
         """Return first hashtag from prepopulated list.
 

@@ -62,3 +62,16 @@ def test_post_model_get_first_tag_with_prepopulation():
     post_model.tags = tag_set
 
     assert post_model.get_first_tag() == expected
+
+
+@pytest.mark.django_db
+def test_post_model_get_first_tag_no_tags_available():
+    """Test Post model get_first_tag function."""
+    expected = ""
+    
+    post_model = baker.make(PostModel)
+
+    # Adding empty tag list
+    post_model.tags = []
+
+    assert post_model.get_first_tag() == expected
