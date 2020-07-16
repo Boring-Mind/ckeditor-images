@@ -1,6 +1,11 @@
 import pytest
 from model_bakery import baker
 
+from editor.blog_admin.models import Post as PostModel, Hashtags
+
+
+# Post model
+#####################################
 
 @pytest.mark.django_db
 def test_post_model_string(freezer):
@@ -20,3 +25,40 @@ def test_post_model_string(freezer):
     )
 
     assert str(post_model) == expected
+
+
+@pytest.mark.django_db
+def test_post_model_get_first_tag_without_prepopulation():
+    """Test Post model get_first_tag function."""
+    expected = ""
+
+    # Despite setted hashtags, function will return empty value
+    # Because hashtag field wasn't prepopulated
+    tag_set = baker.prepare(Hashtags, _quantity=3)
+    tag_set[0].text = "First tag"
+    
+    post_model = baker.make(
+        PostModel,
+        hashtags=tag_set
+    )
+
+    assert post_model.get_first_tag() == expected
+
+
+@pytest.mark.django_db
+def test_post_model_get_first_tag_with_prepopulation():
+    """Test Post model get_first_tag function."""
+    expected = "First tag"
+
+    tag_set = baker.prepare(Hashtags, _quantity=3)
+    tag_set[0].text = expected
+    
+    post_model = baker.make(
+        PostModel,
+        hashtags=tag_set
+    )
+
+    # Adding prepopulated tag list field
+    post_model.tags = tag_set
+
+    assert post_model.get_first_tag() == expected
