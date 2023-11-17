@@ -8,6 +8,6 @@ pytest-cov==2.10.0
 pytest-django==3.9.0
 pytest-freezegun==0.4.1
 pytest==5.4.3
-selenium==3.141.0
+selenium==4.15.1
 splinter==0.13.0
 wand==0.6.1
